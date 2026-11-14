@@ -25,3 +25,8 @@ Thumbs.db
 desktop.ini
 .DS_Store
 .vscode/
+
+# Mô hình cơ khí: STEP dựng lại được từ mechanical/src, ảnh nháp
+/mechanical/STEP/
+/mechanical/tmp/
+__pycache__/

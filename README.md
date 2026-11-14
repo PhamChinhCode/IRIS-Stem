@@ -2,7 +2,7 @@
 
 Hệ thống module tái sử dụng để dạy nhà thông minh, robot và IoT cho học sinh 12–18 tuổi, lập trình kéo thả trên MicroBlocks.
 
-Bắt đầu đọc từ [docs/THIET-KE-HE-THONG.md](docs/THIET-KE-HE-THONG.md). Mô hình trực quan: [docs/ban-do-kit-stem.html](docs/ban-do-kit-stem.html).
+Bắt đầu đọc từ [docs/THIET-KE-HE-THONG.md](docs/THIET-KE-HE-THONG.md). Mô hình trực quan: [docs/ban-do-kit-stem.html](docs/ban-do-kit-stem.html). Kích thước bo mạch, chi tiết in 3D và mô hình lắp ráp: [docs/THIET-KE-CO-KHI.md](docs/THIET-KE-CO-KHI.md).
 
 ## Cấu trúc thư mục
 
@@ -22,7 +22,7 @@ firmware/       Firmware STM32G030 của module thông minh
   S2-do-line/
   S3-imu/
 libraries/      Thư viện khối MicroBlocks tự viết
-mechanical/     Cơ khí K1–K4
+mechanical/     Cơ khí K1–K4: mã CAD tham số (src/), tệp in 3D (STL/)
 projects/       Chương trình mẫu 25 dự án, theo 5 cấp độ
 curriculum/     Giáo án, phiếu bài học
 ```

@@ -106,6 +106,9 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .stage canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
 .zoom{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:4px}
 .zoom button{width:32px;height:32px;border:1px solid var(--line);background:var(--surface);border-radius:6px;font-size:1.1rem;line-height:1}
+.mode{position:absolute;top:8px;left:8px;display:flex;gap:4px;flex-wrap:wrap;max-width:calc(100% - 56px)}
+.mode button{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:6px 10px;font-size:.8rem;line-height:1.2}
+.mode button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
 .hint{font-size:.8rem;color:var(--muted)}
 .badge{display:inline-block;font-size:.74rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--tc)}
 .group{display:flex;flex-direction:column;gap:8px}
@@ -282,8 +285,8 @@ function renderProject() {
     <p class="stem"><b>Kiến thức STEM:</b> ${p.stem}</p>
     ${p.open ? '<p class="note">Không có sơ đồ cố định. Học sinh chọn module ở tab Module và tự thiết kế cách nối.</p>' : `
     ${window.THREE ? `<div class="group" id="g3d"><h3>Mô hình 3D</h3>
-      <div class="stage" id="stage"><div class="zoom"><button data-zoom="0.85" aria-label="Phóng to">+</button><button data-zoom="1.18" aria-label="Thu nhỏ">−</button></div></div>
-      <p class="hint">Kéo để xoay, bấm + hoặc − để phóng to, thu nhỏ. Nhãn trên mô hình là mã module trong sơ đồ nối bên dưới. Mô hình minh họa cách bố trí, không đúng tỉ lệ.</p></div>` : ''}
+      <div class="stage" id="stage"><div class="mode"><button data-view3d="cad" aria-pressed="${view3d === 'cad'}">Mô hình CAD</button><button data-view3d="so" aria-pressed="${view3d === 'so'}">Sơ đồ khối</button></div><div class="zoom"><button data-zoom="0.85" aria-label="Phóng to">+</button><button data-zoom="1.18" aria-label="Thu nhỏ">−</button></div></div>
+      <p class="hint">Kéo để xoay, bấm + hoặc − để phóng to, thu nhỏ. «Mô hình CAD» là bản thiết kế cơ khí đúng tỉ lệ, ở cấu hình đầy đủ của nhóm dự án. «Sơ đồ khối» chỉ gồm các module của riêng dự án này, kèm nhãn mã module như trong sơ đồ nối bên dưới.</p></div>` : ''}
     <div class="group"><h3>Sơ đồ nối</h3><div class="dg">${rows}</div></div>
     ${p.k ? `<div class="extra"><span>Cơ khí:</span>${p.k.map(m => chip(m)).join('')}</div>` : ''}
     <div class="legend">
@@ -340,6 +343,12 @@ document.addEventListener('click', e => {
   if (!b) return;
   const d = b.dataset;
   if (d.zoom) { zoom3d(+d.zoom); return; }
+  if (d.view3d) {
+    view3d = d.view3d;
+    document.querySelectorAll('[data-view3d]').forEach(x => x.setAttribute('aria-pressed', x.dataset.view3d === view3d));
+    if (R3 && cur3d) build3d(cur3d);
+    return;
+  }
   if (d.tab) state.tab = d.tab;
   else if (d.lv !== undefined) { state.lv = +d.lv; state.proj = P.find(p => p.lv === state.lv).id; }
   else if (d.proj) { state.proj = +d.proj; state.lv = P.find(p => p.id === state.proj).lv; state.tab = 'proj'; }
@@ -353,7 +362,7 @@ document.addEventListener('click', e => {
 const T3 = {core:0x14605a, smart:0x7a3fd1, in:0x2b7fd0, out:0xd9731e, mech:0x8a8178};
 const SIZE = {C1:[8,6], C2:[7,4], S1:[5,4], S2:[9,1.6], O7:[6,3], I13:[4,6], I4:[4,4], O2:[6,1.2], O3:[3,3]};
 const PI = Math.PI;
-let R3 = null, G = null, sway = null, az = .75, el = .5, dist = 62, auto = true;
+let R3 = null, G = null, sway = null, az = .75, el = .5, dist = 62, auto = true, ty = 4, view3d = 'cad', cur3d = null;
 const v = (x, y, z) => new THREE.Vector3(x, y, z);
 const mat = c => new THREE.MeshLambertMaterial({color:c});
 const glow = c => new THREE.MeshLambertMaterial({color:c, emissive:c, emissiveIntensity:.75});
@@ -562,7 +571,33 @@ function garden(p) {
   mod('O4', -13.5, 0, 3); mod('C1', 1, 0, 9); mod('O3', 10, 0, 10); mod('I6', -10, 0, 9.5);
 }
 
+/* Mô hình CAD: lưới tam giác xuất từ mechanical/ (tệp mo-hinh-3d.js), toạ độ mm, trục Z hướng lên. */
+const cadName = id => id >= 5 && id <= 10 ? 'nha_thong_minh' : id >= 11 && id <= 16 ? 'xe_do_line' : id === 18 ? 'vuon_thong_minh'
+  : (id === 21 || id === 22) ? 'xe_can_bang' : id === 23 ? 'canh_tay_robot' : id === 24 ? 'bang_tai' : 'ban_thuc_hanh';
+function b64(str, T) {
+  const b = atob(str), u = new Uint8Array(b.length);
+  for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i);
+  return new T(u.buffer);
+}
+function cad(name) {
+  const d = window.MO_HINH[name], g = new THREE.Group();
+  for (const m of d.m) {
+    const q = b64(m.p, Int16Array), pos = new Float32Array(q.length);
+    for (let i = 0; i < q.length; i++) pos[i] = q[i] * d.s + d.o[i % 3];
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setIndex(new THREE.BufferAttribute(b64(m.i, m.w === 2 ? Uint16Array : Uint32Array), 1));
+    g.add(new THREE.Mesh(geo, new THREE.MeshPhongMaterial({color:m.c, flatShading:true, shininess:10, side:THREE.DoubleSide})));
+  }
+  g.rotation.x = -PI / 2;
+  const bb = new THREE.Box3().setFromObject(g), sz = bb.getSize(new THREE.Vector3()), c = bb.getCenter(new THREE.Vector3());
+  const k = 46 / Math.max(sz.x, sz.z), w = new THREE.Group();
+  g.position.set(-c.x, -bb.min.y, -c.z); w.add(g); w.scale.setScalar(k); G.add(w);
+  ty = Math.min(12, sz.y * k / 2); dist = 72;
+}
+
 function build3d(p) {
+  cur3d = p; ty = 4;
   if (G) {
     G.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } });
     R3.scene.remove(G);
@@ -575,7 +610,9 @@ function build3d(p) {
   else if (id === 21 || id === 22) { f = balance; dd = 60; }
   else if (id === 23) { f = arm; dd = 68; }
   else if (id === 24) { f = conveyor; dd = 76; }
-  dist = dd; f(p);
+  const cn = cadName(id);
+  if (view3d === 'cad' && window.MO_HINH && window.MO_HINH[cn]) cad(cn);
+  else { dist = dd; f(p); }
 }
 
 function init3d() {
@@ -608,8 +645,8 @@ function init3d() {
     if (auto && !still) az += .0025;
     if (sway && !still) sway.rotation.z = Math.sin((t || 0) / 700) * .05;
     const c = Math.cos(el);
-    cam.position.set(Math.sin(az) * c * dist, Math.sin(el) * dist + 4, Math.cos(az) * c * dist);
-    cam.lookAt(0, 4, 0);
+    cam.position.set(Math.sin(az) * c * dist, Math.sin(el) * dist + ty, Math.cos(az) * c * dist);
+    cam.lookAt(0, ty, 0);
     renderer.render(scene, cam);
   })(0);
   R3 = {cv, scene, ro, size};
@@ -626,5 +663,11 @@ function zoom3d(k) { dist = Math.min(150, Math.max(28, dist * k)); }
 const elec = Object.keys(M).filter(m => M[m].t !== 'mech').length;
 $('facts').innerHTML = `<span><b>${P.length}</b> dự án</span><span><b>${LV.length}</b> cấp độ</span><span><b>${elec}</b> module điện tử</span><span><b>3</b> module thông minh tự thiết kế</span><span>Học sinh <b>12–18</b> tuổi</span><span>Lập trình kéo thả <b>MicroBlocks</b></span>`;
 render();
+/* Nạp dữ liệu mô hình CAD sau khi trang đã hiện; trước đó (hoặc nếu nạp lỗi) khung 3D dùng sơ đồ khối. */
+(() => {
+  const sc = document.createElement('script'); sc.src = 'mo-hinh-3d.js'; sc.async = true;
+  sc.onload = () => { if (R3 && cur3d && state.tab === 'proj') build3d(cur3d); };
+  document.head.appendChild(sc);
+})();
 </script>
 </body></html>

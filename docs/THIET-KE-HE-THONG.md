@@ -172,7 +172,7 @@ Không có vi điều khiển, chỉ là bo mang có đầu cắm chuẩn và l�
 | K3 | Mô hình nhà | tấm cắt laser, lỗ gá module theo lưới 8 mm |
 | K4 | Phụ kiện | sa bàn line, thẻ RFID, cánh tay robot, băng tải mini |
 
-Mọi module có 4 lỗ bắt vít theo cùng lưới 8 mm với K2 và K3.
+Mọi module có 4 lỗ bắt vít theo cùng lưới 8 mm với K2 và K3. Kích thước từng bo, từng chi tiết in 3D và mô hình lắp ráp của các dự án nằm trong [THIET-KE-CO-KHI.md](THIET-KE-CO-KHI.md).
 
 ### 4.5. Module mở rộng qua cổng D3/UART
 
