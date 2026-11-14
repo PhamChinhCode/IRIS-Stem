@@ -1,0 +1,251 @@
+module main
+author stnapp
+version 1 1
+description 'BUỔI 13 - LÍNH CỨU HỎA TÍ HON
+Ngôi nhà thông minh tự tìm và dập lửa.
+
+YÊU CẦU
+1. Servo MG90S quay qua lại 0 - 180 độ để tìm lửa.
+2. Cảm biến lửa phát hiện ngọn lửa ở hướng servo đang nhìn.
+3. Thấy lửa: servo dừng đúng hướng đó, máy bơm phun nước tới khi lửa tắt.
+4. An toàn: bơm không chạy quá 5 giây liền; dây cảm biến tuột thì máy coi như không có lửa.
+5. Lập trình hoàn toàn bằng khối trên stnapp.
+
+HÔM NAY EM HỌC ĐƯỢC GÌ?
+Em cho máy tự "nhìn" bằng cảm biến, tự "quyết định" bằng khối nếu, và tự "hành động" bằng servo và máy bơm.
+
+CẮM DÂY (board RP2040 Pro Micro - mỗi nhãn thuộc về chân ở phía cổng USB)
+Servo: cam -> 2, đỏ -> 5V, nâu -> G
+Cảm biến lửa: DO -> 3, VCC -> 3V3, GND -> G
+Relay bơm: IN -> 4, VCC -> 5V, GND -> G
+
+Gắn cảm biến lửa và vòi phun cùng trên tay servo, cùng hướng.'
+variables 'chân servo' 'chân cảm biến lửa' 'chân bơm' 'cảm biến báo lửa ở mức' 'bơm bật ở mức' 'thời gian phun tối đa' 'góc'
+
+  spec ' ' 'quay servo' 'quay servo đến góc _ độ (0 - 180)' 'num' 90
+  spec 'r' 'có lửa?' 'có lửa?'
+  spec ' ' 'bật bơm' 'bật bơm'
+  spec ' ' 'tắt bơm' 'tắt bơm'
+  spec ' ' 'quét tại góc' 'quét tại góc _' 'num' 0
+  spec ' ' 'phun nước dập lửa' 'phun nước dập lửa'
+
+script 40 10 {
+comment 'BUỔI 13 - LÍNH CỨU HỎA TÍ HON: ngôi nhà tự tìm và dập lửa'
+}
+
+script 40 117 {
+whenStarted
+comment 'CÀI ĐẶT - số chân theo board RP2040 Pro Micro'
+'chân servo' = 2
+'chân cảm biến lửa' = 3
+'chân bơm' = 4
+comment 'Đa số module cảm biến lửa báo mức THẤP (sai) khi thấy lửa'
+'cảm biến báo lửa ở mức' = (booleanConstant false)
+comment 'Relay thường bật ở mức THẤP (sai)'
+comment 'Module MOSFET bật ở mức CAO (đúng)'
+'bơm bật ở mức' = (booleanConstant false)
+comment 'Bơm không chạy liền quá số mili giây này'
+'thời gian phun tối đa' = 5000
+'tắt bơm'
+'quay servo' 0
+waitMillis 600
+forever {
+  'góc' = 0
+  repeat 18 {
+    'quét tại góc' (v 'góc')
+    'góc' += 10
+  }
+  repeat 18 {
+    'quét tại góc' (v 'góc')
+    'góc' += -10
+  }
+}
+}
+
+script 540 10 {
+to 'quét tại góc' {}
+}
+
+script 540 522 {
+to 'phun nước dập lửa' {}
+}
+
+script 1055 10 {
+to 'có lửa?' {}
+}
+
+script 1055 796 {
+to 'quay servo' {}
+}
+
+script 1055 1028 {
+to 'bật bơm' {}
+}
+
+script 1055 1171 {
+to 'tắt bơm' {}
+}
+
+to 'quay servo' 'độ' {
+  comment 'Thư viện Servo dùng góc -90 đến 90'
+  comment 'Đổi từ 0 - 180 cho đúng góc thật của MG90S'
+  setServoAngle (v 'chân servo') ((v 'độ') - 90)
+}
+
+to 'có lửa?' {
+  comment 'AN TOÀN: dây cảm biến tuột thì chân đọc lung tung'
+  comment 'Kéo chân về phía KHÔNG có lửa để máy không bật bơm'
+  local 'kéo' 'up'
+  if (v 'cảm biến báo lửa ở mức') {
+    'kéo' = 'down'
+  }
+  comment 'Đọc 2 lần cách nhau 30 ms để tránh báo nhầm'
+  if ((digitalReadOp (v 'chân cảm biến lửa') (v 'kéo')) == (v 'cảm biến báo lửa ở mức')) {
+    waitMillis 30
+    return ((digitalReadOp (v 'chân cảm biến lửa') (v 'kéo')) == (v 'cảm biến báo lửa ở mức'))
+  }
+  return false
+}
+
+to 'bật bơm' {
+  digitalWriteOp (v 'chân bơm') (v 'bơm bật ở mức')
+}
+
+to 'tắt bơm' {
+  digitalWriteOp (v 'chân bơm') (not (v 'bơm bật ở mức'))
+}
+
+to 'quét tại góc' 'độ' {
+  'quay servo' (v 'độ')
+  comment 'Chờ servo quay tới nơi'
+  waitMillis 100
+  comment 'Lửa lay động nên nhìn 3 lần ở mỗi góc'
+  repeat 3 {
+    if ('có lửa?') {
+      'phun nước dập lửa'
+      return 0
+    }
+    waitMillis 40
+  }
+}
+
+to 'phun nước dập lửa' {
+  comment 'Lửa lay động nên cảm biến báo lúc có lúc không'
+  comment 'Phun tới khi KHÔNG thấy lửa liền 1 giây (tối đa 5 giây)'
+  local 'bắt đầu' (millisOp)
+  local 'lần cuối thấy lửa' (millisOp)
+  'bật bơm'
+  repeatUntil (or (((millisOp) - (v 'lần cuối thấy lửa')) > 1000) (((millisOp) - (v 'bắt đầu')) > (v 'thời gian phun tối đa'))) {
+    if ('có lửa?') {
+      'lần cuối thấy lửa' = (millisOp)
+    }
+    waitMillis 50
+  }
+  'tắt bơm'
+  waitMillis 1000
+}
+
+module Servo Output
+author MicroBlocks
+version 1 4 
+tags servo motor angle rotation position 
+description 'Control both positional (angle) and rotational servo motors.
+'
+variables _servoPin _servoPulseWidth 
+
+  spec ' ' 'setServoAngle' 'set servo _ to _ degrees (-90 to 90)' 'num num' 1 90
+  spec ' ' 'setServoSpeed' 'set servo _ to speed _ (-100 to 100)' 'num num' 1 100
+  spec ' ' 'stopServo' 'stop servo _' 'num' 1
+  spec 'r' '_servoIndex' '_servoIndex _' 'num' 1
+  spec ' ' '_servoPulse' '_servoPulse pin _ usecs _' 'num num' 1 1500
+  spec ' ' '_servoUpdateLoop' '_servoUpdateLoop'
+
+to '_servoIndex' which {
+  if (_servoPin == 0) {
+    _servoPin = ('[data:makeList]')
+    _servoPulseWidth = ('[data:makeList]')
+    sendBroadcast '_servoUpdateLoop'
+  }
+  local 'i' ('[data:find]' which _servoPin)
+  if (i < 0) {
+    comment 'Add new pin'
+    '[data:addLast]' which _servoPin
+    '[data:addLast]' 1500 _servoPulseWidth
+    i = (size _servoPin)
+  }
+  return i
+}
+
+to '_servoPulse' pin usecs {
+  if (usecs == 0) {
+    comment 'Servo stopped; do nothing'
+    return 0
+  }
+  usecs = (maximum 500 (minimum usecs 2900))
+  comment 'Split wait into a long wait followed by a wait of <= 30 usecs for greater accuracy'
+  local 'endTime' ((microsOp) + usecs)
+  digitalWriteOp pin true
+  waitMicros (usecs - 30)
+  waitMicros (endTime - (microsOp))
+  digitalWriteOp pin false
+}
+
+to '_servoUpdateLoop' {
+  forever {
+    if (_servoPin != 0) {
+      comment 'If the _servoPin list is not 0, update the servos'
+      for i (size _servoPin) {
+        local 'pin' (at i _servoPin)
+        local 'usecs' (at i _servoPulseWidth)
+        if (and (pin >= 0) (usecs != 0)) {
+          '_servoPulse' pin usecs
+        }
+      }
+      waitMillis 15
+    }
+  }
+}
+
+to setServoAngle which degrees optionalReverse {
+  local 'reversed' false
+  if ((pushArgCount) > 2) {
+    reversed = optionalReverse
+  }
+  if reversed {
+    degrees = (0 - degrees)
+  }
+  local 'pulseWidth' (1500 - (10 * degrees))
+  if ('[io:hasServo]') {
+    '[io:setServo]' which pulseWidth
+  } else {
+    atPut ('_servoIndex' which) _servoPulseWidth pulseWidth
+  }
+}
+
+to setServoSpeed which speed optionalReverse {
+  local 'reversed' false
+  if ((pushArgCount) > 2) {
+    reversed = optionalReverse
+  }
+  if reversed {
+    speed = (0 - speed)
+  }
+  local 'pulseWidth' (1500 - (10 * speed))
+  if ((absoluteValue speed) < 2) {
+    pulseWidth = 0
+  }
+  if ('[io:hasServo]') {
+    '[io:setServo]' which pulseWidth
+  } else {
+    atPut ('_servoIndex' which) _servoPulseWidth pulseWidth
+  }
+}
+
+to stopServo which {
+  if ('[io:hasServo]') {
+    '[io:setServo]' which 0
+  } else {
+    atPut ('_servoIndex' which) _servoPulseWidth 0
+  }
+}
+

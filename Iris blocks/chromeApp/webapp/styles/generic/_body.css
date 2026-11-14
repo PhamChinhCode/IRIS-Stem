@@ -1,0 +1,12 @@
+body {
+	font-family: var(--font-ui);
+	overflow: hidden;
+	background-color: var(--surface-app); /* upstream omitted var(), so this was ignored */
+
+	& * {
+		user-select: none;
+		&:focus-visible {
+			outline: none;
+		}
+	}
+}

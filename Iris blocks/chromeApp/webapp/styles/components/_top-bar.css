@@ -1,0 +1,213 @@
+/*
+ * Top Bar
+**/
+
+
+.top-bar {
+	height: var(--space-48);
+	display: flex;
+	align-items: stretch;
+}
+
+
+.top-bar__logo {
+	display: block;
+	height: 100%;
+	padding: var(--space-6) var(--space-24) var(--space-6) var(--space-6);
+
+	border-right: 1px solid var(--border-chrome);
+	flex-shrink: 0; /* the bar is a flex row; without this the mark gets squeezed */
+
+	img {
+		/* Height-driven, so the mark can never outgrow the bar: setting only a width
+		   let a 130:57 logo render 70px tall inside a 48px bar, over the divider.
+		   aspect-ratio is what makes 'width: auto' resolvable here -- as a flex item
+		   a width that depends on a percentage height is circular, and resolves to 0.
+		   Keep this in step with the viewBox of img/stnapp-logo.svg. */
+		height: 100%;
+		width: auto;
+		aspect-ratio: 140 / 44;
+		display: block;
+		pointer-events: none;
+	}
+}
+
+
+.top-bar__main-menu {
+	padding: 0 var(--space-20);
+
+	display: flex;
+	align-items: center;
+	gap: var(--space-8);
+}
+
+
+.top-bar__title.--has-title {
+	height: 100%;
+	padding: 0 var(--space-20);
+	display: flex;
+	align-items: center;
+
+	font-size: var(--fontSize-16);
+	color: var(--color-grey-100);
+
+	border-left: 1px solid var(--border-chrome);
+}
+
+
+.top-bar__controls {
+	margin-left: auto;
+	padding: 0 var(--space-16) 0 var(--space-24);
+
+	display: flex;
+	align-items: center;
+	gap: var(--space-8);
+}
+
+
+
+
+
+/* Progress */
+
+
+.top-bar__controls-progress {
+	position: relative;
+	width: var(--space-32);
+	height: var(--space-32);
+
+	border-radius: var(--borderRadius-max);
+	mask: radial-gradient(farthest-corner, transparent 12px, black 13px);
+}
+
+
+
+
+
+/* Buttons */
+
+
+.top-bar__main-menu-button {
+	height: var(--space-24);
+	width: var(--space-24);
+
+	color: var(--text-chrome-muted);
+
+	&:hover {
+		color: var(--color-yellow-action);
+	}
+
+	svg {
+		transition: color var(--duration-75) ease-in;
+	}
+}
+
+
+.top-bar__button-rounded {
+	width: var(--space-32);
+	height: var(--space-32);
+	border-radius: var(--borderRadius-max);
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	color: var(--text-chrome);
+	background-color: var(--surface-sunken);
+	transition:
+		color var(--duration-75) ease-in,
+		background-color var(--duration-75) ease-in;
+
+	&:hover {
+		color: var(--color-blue-grey-900);
+		background-color: var(--color-yellow-action);
+	}
+
+	&.--is-active {
+		color: var(--color-blue-grey-900);
+		background-color: var(--color-yellow-action);
+	}
+
+	svg {
+		width: var(--space-16);
+		height: var(--space-16);
+
+		transition: color var(--duration-75) ease-in;
+	}
+}
+
+
+.top-bar__separator {
+	height: 100%;
+	width: 1px;
+	margin: 0 var(--space-8);
+
+	background-color: var(--border-chrome);
+}
+
+
+.top-bar__controls-connect {
+	display: flex;
+	align-items: center;
+
+	.top-bar__controls-connect-label {
+		margin: 0 var(--space-6) 0 var(--space-8);
+
+		font-size: var(--fontSize-14);
+		color: var(--text-chrome);
+	}
+
+	.top-bar__controls-connect-dropdown {
+		color: var(--text-chrome-muted);
+		transition: color var(--duration-75) ease-in;
+	}
+
+	&:hover {
+		cursor: pointer;
+
+		.top-bar__button-rounded {
+			color: var(--color-blue-grey-900);
+			background-color: var(--color-yellow-action);
+		}
+
+		.top-bar__controls-connect-dropdown {
+			color: var(--color-yellow-action);
+		}
+	}
+
+
+	/* Connected */
+	&.--is-connected {
+
+		.top-bar__button-rounded {
+			color: var(--color-blue-grey-900);
+			background-color: var(--color-boolean-green);
+		}
+	}
+}
+
+
+.top-bar__controls-run {
+	width: var(--space-24);
+	height: var(--space-24);
+
+	color: var(--color-run-green);
+	transition: color var(--duration-75) ease-in;
+
+	&:hover {
+		color: var(--color-run-green--hover);
+	}
+}
+
+
+.top-bar__controls-stop {
+	width: var(--space-24);
+	height: var(--space-24);
+
+	color: var(--text-chrome-muted);
+	transition: color var(--duration-75) ease-in;
+
+	&:hover {
+		color: var(--color-boolean-red--hover);
+	}
+}

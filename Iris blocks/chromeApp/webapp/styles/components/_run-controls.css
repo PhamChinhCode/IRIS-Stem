@@ -1,0 +1,77 @@
+/*
+ * Run Controls
+ *
+ * Large round run/stop buttons floating over the bottom right of the workspace,
+ * the way OhStem App presents them. Pupils hit these constantly, so they are sized
+ * to be unmissable and reachable without reading any label.
+**/
+
+
+.run-controls {
+	position: absolute;
+	right: var(--space-24);
+	/* Clear of .scripts-pane-controls, which is fixed to the same corner at
+	   bottom 48px and stands about 48px tall; at bottom 24px the stop button
+	   sat on top of the zoom bar. */
+	bottom: var(--space-80);
+	z-index: var(--zindex-above);
+
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-12);
+
+	/* The morphic canvas fills this wrapper; only the buttons themselves should
+	   swallow clicks, so dragging a block past them still works. */
+	pointer-events: none;
+}
+
+
+.run-controls__button {
+	width: var(--space-56);
+	height: var(--space-56);
+	pointer-events: auto;
+
+	display: grid;
+	place-items: center;
+
+	border: none;
+	border-radius: var(--borderRadius-max);
+	color: var(--color-white);
+	box-shadow: 0 2px 8px rgba(45, 49, 67, 0.25);
+	cursor: pointer;
+
+	transition:
+		background-color var(--duration-75) ease-in,
+		transform var(--duration-75) ease-in;
+
+	svg {
+		width: var(--space-24);
+		height: var(--space-24);
+	}
+
+	&:hover {
+		transform: scale(1.06);
+	}
+
+	&:active {
+		transform: scale(0.96);
+	}
+
+	&.--run {
+		background-color: var(--color-run-green);
+
+		&:hover { background-color: var(--color-run-green--hover); }
+	}
+
+	&.--stop {
+		background-color: var(--color-boolean-red);
+
+		&:hover { background-color: var(--color-boolean-red--hover); }
+	}
+
+	&.--is-disabled {
+		opacity: 0.45;
+		cursor: default;
+		pointer-events: none;
+	}
+}
