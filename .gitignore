@@ -1,0 +1,30 @@
+# Kho fork MicroBlocks là kho git riêng (xem docs/THIET-KE-HE-THONG.md mục 12)
+/microblocks/
+
+# KiCad
+*-backups/
+*.kicad_prl
+*.lck
+*-cache.lib
+*-rescue.lib
+*.bak
+*~
+_autosave-*
+fp-info-cache
+
+# Firmware build
+build/
+Debug/
+Release/
+*.o
+*.d
+*.elf
+*.map
+*.lst
+.pio/
+
+# Hệ điều hành, trình soạn thảo
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/

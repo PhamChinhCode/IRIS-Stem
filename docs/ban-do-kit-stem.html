@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>Bản đồ kit STEM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Bố cục: thanh bo chủ đứng bên trái như một dải mạch in, mỗi cổng kéo một sợi dây màu sang module. */
+:root{
+  --bg:#f2f5f4; --surface:#ffffff; --sunk:#e7edeb; --fg:#15201e; --muted:#5a6966; --line:#d3dbd8;
+  --board:#0f4f49; --board-fg:#e6f4f1; --accent:#0d7a70; --accent-fg:#ffffff;
+  --core:#0d7a70; --smart:#7a3fd1; --in:#1668b3; --out:#b4560c; --mech:#6b6259;
+  --w-da:#7d8a87; --w-i2c:#2f6fe4; --w-spi:#b58a00; --w-sv:#3a4442; --w-pwr:#c9451a;
+  --f-body:'Be Vietnam Pro',system-ui,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1716; --surface:#172220; --sunk:#1f2c2a; --fg:#e4eeeb; --muted:#93a5a1; --line:#2c3b38;
+  --board:#14605a; --board-fg:#e6f4f1; --accent:#3cc2b3; --accent-fg:#06211e;
+  --core:#3cc2b3; --smart:#b28cf5; --in:#6db3f2; --out:#f0a35e; --mech:#b3a79b;
+  --w-da:#93a5a1; --w-i2c:#6c9cf5; --w-spi:#e0b93a; --w-sv:#c9d3d0; --w-pwr:#f0774c;
+  color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f1716; --surface:#172220; --sunk:#1f2c2a; --fg:#e4eeeb; --muted:#93a5a1; --line:#2c3b38;
+  --board:#14605a; --board-fg:#e6f4f1; --accent:#3cc2b3; --accent-fg:#06211e;
+  --core:#3cc2b3; --smart:#b28cf5; --in:#6db3f2; --out:#f0a35e; --mech:#b3a79b;
+  --w-da:#93a5a1; --w-i2c:#6c9cf5; --w-spi:#e0b93a; --w-sv:#c9d3d0; --w-pwr:#f0774c;
+  color-scheme:dark }
+
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding-block:28px 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:22px}
+h1{font-size:1.7rem;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:1.25rem;line-height:1.3;margin:0;font-weight:600;text-wrap:balance}
+h3{font-size:.76rem;margin:0;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+p{margin:0}
+.lede{color:var(--muted);max-width:65ch}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.facts b{color:var(--fg);font-weight:600}
+header{display:flex;flex-direction:column;gap:10px}
+
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.tabs{display:flex;gap:4px;background:var(--sunk);padding:4px;border-radius:8px;align-self:flex-start;flex-wrap:wrap}
+.tabs button{border:0;background:transparent;padding:7px 16px;border-radius:5px;font-weight:500;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgb(0 0 0 / .12)}
+
+.view{display:flex;flex-direction:column;gap:18px}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.levels button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 12px;text-align:left;display:flex;flex-direction:column;gap:1px}
+.levels button small{color:var(--muted);font-size:.8rem}
+.levels button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.levels .lvn{font-weight:600}
+
+.picks{display:flex;flex-wrap:wrap;gap:6px}
+.pick{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px 5px 6px;display:inline-flex;gap:8px;align-items:center}
+.pick .num{font-family:var(--f-mono);font-size:.76rem;min-width:24px;height:24px;border-radius:999px;background:var(--sunk);display:inline-flex;align-items:center;justify-content:center}
+.pick[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.pick[aria-pressed="true"] .num{background:var(--accent-fg);color:var(--accent)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.meta{font-size:.86rem;color:var(--muted)}
+.what{max-width:65ch}
+.stem{font-size:.9rem;color:var(--muted);max-width:65ch}
+.stem b{color:var(--fg);font-weight:600}
+
+/* sơ đồ nối dây */
+.dg{position:relative;display:flex;flex-direction:column;gap:2px;padding-block:8px}
+.dg::before{content:"";position:absolute;left:0;top:0;bottom:0;width:76px;background:var(--board);border-radius:8px}
+.row{display:grid;grid-template-columns:76px minmax(0,1fr);align-items:center;min-height:38px}
+.bhead{position:relative;z-index:1;justify-self:center;color:var(--board-fg);font-family:var(--f-mono);font-size:.7rem;text-align:center;line-height:1.25;padding-block:4px}
+.port{position:relative;z-index:1;justify-self:center;width:56px;text-align:center;font-family:var(--f-mono);font-size:.72rem;padding:3px 0;border-radius:4px;border:1px solid transparent}
+.p-da{background:#f1f1ec;color:#1c2422}
+.p-i2c{background:#2f6fe4;color:#ffffff}
+.p-spi{background:#e2b714;color:#1c2422}
+.p-sv{background:#1c2422;color:#f1f1ec;border-color:#6f7d7a}
+.p-pwr{background:#c9451a;color:#ffffff}
+.p-on{background:transparent;color:#e6f4f1;border-color:#8fb8b2}
+.run{display:flex;flex-wrap:wrap;align-items:center;row-gap:6px;min-width:0;padding-block:3px}
+.w{flex:0 0 20px;height:2px;background:var(--wc,var(--w-da))}
+.wc-i2c{--wc:var(--w-i2c)} .wc-spi{--wc:var(--w-spi)} .wc-sv{--wc:var(--w-sv)} .wc-pwr{--wc:var(--w-pwr)} .wc-da{--wc:var(--w-da)}
+.row.off .port{opacity:.4}
+.row.off{min-height:28px}
+.empty{font-size:.8rem;color:var(--muted);padding-left:12px}
+.note{font-size:.86rem;padding:4px 10px;border:1px dashed var(--line);border-radius:6px;color:var(--muted)}
+
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:5px 10px;display:inline-flex;align-items:baseline;gap:7px;text-align:left;max-width:100%}
+.chip .code{font-family:var(--f-mono);font-size:.76rem;color:var(--tc);flex:none}
+.chip .att{font-size:.8rem;color:var(--muted)}
+.chip .cnt{font-size:.76rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.chip:hover,.pick:hover,.levels button:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{border-color:var(--tc);box-shadow:inset 0 0 0 1px var(--tc)}
+.t-core{--tc:var(--core)} .t-smart{--tc:var(--smart)} .t-in{--tc:var(--in)} .t-out{--tc:var(--out)} .t-mech{--tc:var(--mech)}
+.chip.t-smart{border-color:var(--smart)}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.8rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:18px;height:3px;border-radius:2px;background:var(--wc)}
+.legend .dot{width:9px;height:9px;border-radius:50%;background:var(--tc)}
+.extra{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.88rem;color:var(--muted)}
+
+.stage{position:relative;background:var(--sunk);border-radius:8px;overflow:hidden;aspect-ratio:16/10;max-height:460px;width:100%}
+.stage canvas{display:block;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.zoom{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:4px}
+.zoom button{width:32px;height:32px;border:1px solid var(--line);background:var(--surface);border-radius:6px;font-size:1.1rem;line-height:1}
+.hint{font-size:.8rem;color:var(--muted)}
+.badge{display:inline-block;font-size:.74rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--tc)}
+.group{display:flex;flex-direction:column;gap:8px}
+.kv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:4px 14px;font-size:.92rem}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;font-size:.82rem;font-variant-numeric:tabular-nums}
+th,td{padding:0;border-bottom:1px solid var(--line)}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+thead th{position:sticky;top:0;background:var(--surface)}
+th.mh{position:sticky;left:0;background:var(--surface);text-align:left;font-weight:400;white-space:nowrap;border-right:1px solid var(--line)}
+th.mh button{border:0;background:transparent;padding:5px 12px;display:flex;gap:8px;align-items:baseline;width:100%;text-align:left}
+th.mh .code{font-family:var(--f-mono);font-size:.74rem;color:var(--tc);min-width:22px}
+thead th button{border:0;background:transparent;width:30px;height:30px;font-family:var(--f-mono);font-size:.72rem;color:var(--muted)}
+thead th.lvstart, td.lvstart{border-left:1px solid var(--line)}
+td{width:30px;height:28px;text-align:center}
+td i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--tc)}
+tr:hover td, tr:hover th.mh{background:var(--sunk)}
+.corner{position:sticky;left:0;z-index:2;background:var(--surface);border-right:1px solid var(--line);text-align:left;padding:0 12px;font-weight:500;color:var(--muted);font-size:.78rem}
+@media (max-width:520px){ h1{font-size:1.4rem} .panel{padding:16px 14px} .dg::before{width:64px} .row{grid-template-columns:64px minmax(0,1fr)} .port{width:48px} .w{flex-basis:12px} }
+@media (prefers-reduced-motion:no-preference){ .chip,.pick,.levels button{transition:border-color .12s} }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Bản đồ kit STEM ESP32-S3</h1>
+    <p class="lede">Chọn một dự án để xem nó làm gì và cắm những module nào vào cổng nào của bo chủ. Chọn một module để xem nó xuất hiện trong những dự án nào.</p>
+    <div class="facts" id="facts"></div>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Chế độ xem">
+    <button role="tab" id="tab-proj" data-tab="proj" aria-selected="true">Dự án</button>
+    <button role="tab" id="tab-mod" data-tab="mod" aria-selected="false">Module</button>
+    <button role="tab" id="tab-mat" data-tab="mat" aria-selected="false">Bảng tổng hợp</button>
+  </div>
+
+  <section class="view" id="v-proj">
+    <div class="levels" id="levels"></div>
+    <div class="picks" id="picks"></div>
+    <article class="panel" id="pdetail"></article>
+  </section>
+
+  <section class="view" id="v-mod" hidden>
+    <article class="panel" id="mdetail"></article>
+    <div id="mlist" class="view"></div>
+  </section>
+
+  <section class="view" id="v-mat" hidden>
+    <p class="lede">Mỗi chấm là một module được dùng trong dự án ở cột đó. Bấm số dự án hoặc tên module để xem chi tiết.</p>
+    <div class="scroll" id="matrix"></div>
+    <div class="legend" id="tlegend"></div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const TYPES = {core:'Trung tâm', smart:'Module thông minh tự thiết kế', in:'Đầu vào', out:'Đầu ra', mech:'Cơ khí'};
+const M = {
+  C1:{n:'Bo chủ ESP32-S3', t:'core', port:'Máy tính qua USB-C hoặc Bluetooth', d:'Bộ não của kit, chạy chương trình MicroBlocks. Có sẵn 2 nút bấm, còi, LED RGB, WiFi và Bluetooth; 6 cổng D/A, bus I2C, cổng SPI và 4 cổng servo.'},
+  C2:{n:'Nguồn pin 2S', t:'core', port:'5 V vào bo chủ, 7,4 V sang module động lực, I2C để đọc pin', d:'Hai cell 18650 có mạch bảo vệ. Cấp 5 V cho bo chủ và 7,4 V cho động cơ; đo được phần trăm pin và dòng tiêu thụ.'},
+  S1:{n:'Driver động cơ encoder', t:'smart', port:'I2C; nguồn 7,4 V từ C2; 2 cổng động cơ 6 chân', d:'Bo chủ chỉ gửi vận tốc hoặc vị trí mong muốn, module tự điều khiển 2 động cơ cho đúng. Học sinh không phải tự đọc encoder.'},
+  S2:{n:'Dò line 8 mắt', t:'smart', port:'I2C, nối chuỗi', d:'Tám mắt đọc vạch, tự hiệu chuẩn đen trắng. Trả về vị trí vạch từ -100 đến 100 và báo ngã tư, mất vạch.'},
+  S3:{n:'IMU trả góc', t:'smart', port:'I2C, nối chuỗi', d:'Trả về góc nghiêng và góc xoay đã lọc sẵn, kèm cờ báo rung và va chạm.'},
+  I1:{n:'Nút bấm đôi', t:'in', port:'Cổng D/A', d:'Hai nút bấm trên một module.'},
+  I2:{n:'Biến trở xoay', t:'in', port:'Cổng A (analog)', d:'Núm xoay cho giá trị thay đổi liên tục, dùng để chỉnh mức.'},
+  I3:{n:'Joystick 2 trục', t:'in', port:'Cổng A (analog)', d:'Cần gạt hai chiều để điều khiển bằng tay.'},
+  I4:{n:'Bàn phím 4x4', t:'in', port:'I2C', d:'Mười sáu phím để nhập số và mật khẩu.'},
+  I5:{n:'Cảm biến ánh sáng', t:'in', port:'Cổng A (analog)', d:'Đo độ sáng môi trường để biết trời sáng hay tối.'},
+  I6:{n:'Nhiệt ẩm AHT20', t:'in', port:'I2C', d:'Đo nhiệt độ và độ ẩm không khí.'},
+  I7:{n:'Chuyển động PIR', t:'in', port:'Cổng D/A', d:'Phát hiện có người di chuyển trong phòng.'},
+  I8:{n:'Khí gas MQ-2', t:'in', port:'Cổng A (analog)', d:'Phát hiện khí gas và khói.'},
+  I9:{n:'Độ ẩm đất', t:'in', port:'Cổng A (analog)', d:'Cắm vào chậu cây để biết đất khô hay ướt.'},
+  I10:{n:'Cảm biến mưa', t:'in', port:'Cổng A (analog)', d:'Phát hiện nước mưa rơi trên bề mặt.'},
+  I11:{n:'Siêu âm đo khoảng cách', t:'in', port:'Cổng D/A (2 tín hiệu)', d:'Đo khoảng cách tới vật cản bằng sóng siêu âm.'},
+  I12:{n:'Thu hồng ngoại', t:'in', port:'Cổng D/A', d:'Nhận lệnh từ điều khiển từ xa đi kèm.'},
+  I13:{n:'RFID RC522', t:'in', port:'Cổng SPI', d:'Đọc thẻ từ để nhận dạng người hoặc vị trí.'},
+  I14:{n:'Cảm biến màu', t:'in', port:'I2C', d:'Nhận biết màu của vật đặt trước cảm biến.'},
+  O1:{n:'LED đôi', t:'out', port:'Cổng D/A', d:'Hai đèn LED trên một module.'},
+  O2:{n:'Thanh NeoPixel 8 LED', t:'out', port:'Cổng D/A', d:'Tám đèn đổi màu tùy ý, làm đèn báo và hiệu ứng.'},
+  O3:{n:'Màn hình OLED', t:'out', port:'I2C', d:'Màn hình nhỏ hiện chữ, số và đồ thị.'},
+  O4:{n:'Relay', t:'out', port:'Cổng D/A', d:'Công tắc điện tử đóng cắt tải điện áp thấp như đèn 12 V.'},
+  O5:{n:'MOSFET + quạt/bơm', t:'out', port:'Cổng D/A (PWM)', d:'Điều khiển tốc độ quạt hoặc bơm nước mini.'},
+  O6:{n:'Servo', t:'out', port:'Cổng servo, hoặc qua O7', d:'Động cơ quay tới góc chỉ định, làm cửa, tay gạt, khớp tay robot.'},
+  O7:{n:'Bộ điều khiển 16 servo', t:'out', port:'I2C; nguồn từ C2', d:'Điều khiển nhiều servo cùng lúc với nguồn riêng, dùng cho cánh tay robot.'},
+  K1:{n:'Cụm truyền động', t:'mech', port:'Cắm vào cổng động cơ của S1', d:'Hai động cơ encoder kèm gá và bánh xe; có bản N20 và bản JGA25-370.'},
+  K2:{n:'Khung xe đa năng', t:'mech', port:'Bắt vít theo lưới 8 mm', d:'Lắp ngang thành xe dò line, lắp đứng thành xe cân bằng.'},
+  K3:{n:'Mô hình nhà', t:'mech', port:'Bắt vít theo lưới 8 mm', d:'Nhà cắt laser có sẵn lỗ gá module.'},
+  K4:{n:'Phụ kiện', t:'mech', port:'Tùy dự án', d:'Sa bàn vạch, thẻ RFID, khung cánh tay robot, băng tải mini.'}
+};
+const LV = [
+  {n:'Làm quen', age:'12–13 tuổi', s:'8 buổi'},
+  {n:'Nhà thông minh', age:'12–15 tuổi', s:'10 buổi'},
+  {n:'Robot di động', age:'13–16 tuổi', s:'12 buổi'},
+  {n:'IoT', age:'14–17 tuổi', s:'8 buổi'},
+  {n:'Nâng cao', age:'16–18 tuổi', s:'10 buổi'}
+];
+const ATT = {S1:'+ 2 động cơ encoder', O7:'+ 4 servo'};
+const PHONE = 'MQTT tới bảng điều khiển trên điện thoại';
+const P = [
+  {id:1, lv:0, n:'Đèn giao thông', pw:'usb', d:'Ba đèn đỏ, vàng, xanh đổi theo chu kỳ; bấm nút để người đi bộ xin qua đường.', stem:'mạch điện, lệnh tuần tự, thời gian', c:{A1:'I1', D1:'O1', D2:'O2'}},
+  {id:2, lv:0, n:'Đàn điện tử', pw:'usb', d:'Mỗi nút là một nốt nhạc, xoay biến trở để đổi cao độ; còi trên bo chủ phát âm.', stem:'tần số âm thanh, biến, vòng lặp', c:{A1:'I2', D1:'I1'}, on:['Còi']},
+  {id:3, lv:0, n:'Đo phản xạ', pw:'usb', d:'Đèn sáng ngẫu nhiên, bấm nút thật nhanh; màn hình hiện thời gian phản xạ và kỷ lục.', stem:'đo thời gian, số ngẫu nhiên, trung bình cộng', c:{D1:'I1', D2:'O2', I2C:['O3']}},
+  {id:4, lv:0, n:'Nhiệt ẩm kế', pw:'usb', d:'Đo nhiệt độ, độ ẩm trong phòng và hiện lên màn hình; đổi màu đèn khi quá nóng.', stem:'cảm biến, đơn vị đo, hiển thị', c:{I2C:['O3','I6']}, on:['LED RGB']},
+  {id:5, lv:1, n:'Đèn tự động', pw:'adp', d:'Đèn chỉ bật khi trời tối và có người trong phòng, tự tắt khi không còn ai.', stem:'ngưỡng, logic VÀ/HOẶC, tiết kiệm điện', c:{A1:'I5', A2:'I7', D1:'O4', D2:'O1'}, k:['K3']},
+  {id:6, lv:1, n:'Cửa thông minh', pw:'adp', d:'Mở cửa bằng thẻ từ hoặc mật khẩu; nhập sai ba lần thì báo động.', stem:'nhận dạng, mật khẩu, danh sách', c:{I2C:['O3','I4'], SPI:'I13', SV:['O6']}, on:['Còi'], k:['K3']},
+  {id:7, lv:1, n:'Báo cháy, rò gas', pw:'adp', d:'Phát hiện khí gas hoặc nhiệt độ tăng bất thường, hú còi, nháy đèn và bật quạt hút.', stem:'nồng độ khí, cảnh báo, an toàn', c:{A1:'I8', D1:'O2', D2:'O5', I2C:['I6']}, on:['Còi'], k:['K3']},
+  {id:8, lv:1, n:'Quạt theo nhiệt độ', pw:'adp', d:'Quạt quay nhanh dần khi phòng nóng lên; xoay biến trở để đặt nhiệt độ mong muốn.', stem:'PWM, điều khiển tỉ lệ, đồ thị', c:{A1:'I2', D1:'O5', I2C:['O3','I6']}, k:['K3']},
+  {id:9, lv:1, n:'Giàn phơi tự động', pw:'adp', d:'Trời mưa hoặc tối thì giàn phơi tự thu vào, nắng lên thì đưa ra.', stem:'máy trạng thái, cơ cấu truyền động', c:{A1:'I10', A2:'I5', SV:['O6']}, k:['K3']},
+  {id:10, lv:1, n:'Nhà thông minh IoT', pw:'adp', d:'Ghép các dự án 5–9 thành một ngôi nhà hoàn chỉnh, xem và điều khiển từ điện thoại.', stem:'WiFi, MQTT, tích hợp hệ thống', c:{A1:'I5', A2:'I8', A3:'I10', D1:'O4', D2:'O5', D3:'I7', I2C:['O3','I6','I4'], SPI:'I13', SV:['O6','O6']}, on:['Còi','LED RGB'], wifi:PHONE, k:['K3']},
+  {id:11, lv:2, n:'Xe điều khiển từ xa', pw:'bat', d:'Xe hai bánh chạy tiến, lùi, rẽ theo điều khiển hồng ngoại.', stem:'vận tốc, chuyển động vi sai', c:{D1:'I12', I2C:['S1']}, k:['K1','K2']},
+  {id:12, lv:2, n:'Xe tránh vật cản', pw:'bat', d:'Xe tự chạy, quay cảm biến siêu âm sang hai bên để chọn hướng còn trống.', stem:'vận tốc âm thanh, đo khoảng cách', c:{D1:'I11', I2C:['S1'], SV:['O6']}, k:['K1','K2']},
+  {id:13, lv:2, n:'Xe dò line cơ bản', pw:'bat', d:'Xe bám theo vạch đen trên sa bàn bằng luật rẽ trái, rẽ phải đơn giản.', stem:'phản xạ ánh sáng, điều khiển bật–tắt', c:{I2C:['S1','S2']}, k:['K1','K2','K4']},
+  {id:14, lv:2, n:'Xe dò line PID', pw:'bat', d:'Xe bám vạch mượt và nhanh nhờ PID; chỉnh Kp, Ki, Kd và xem kết quả trên màn hình.', stem:'sai số, P–I–D, thực nghiệm chỉnh tham số', c:{I2C:['S1','S2','O3']}, k:['K1','K2','K4']},
+  {id:15, lv:2, n:'Xe vẽ hình', pw:'bat', d:'Xe chạy theo hình vuông, tam giác, ngôi sao bằng lệnh đi thẳng và quay góc chính xác.', stem:'chu vi, góc, quãng đường = vận tốc × thời gian', c:{I2C:['S1','S3']}, k:['K1','K2']},
+  {id:16, lv:2, n:'Xe giao hàng', pw:'bat', d:'Xe theo vạch tới đúng trạm nhờ thẻ RFID, dừng giao hàng và báo trạng thái về máy chủ.', stem:'ngã tư, bản đồ, nhận dạng trạm, truyền tin', c:{I2C:['S1','S2'], SPI:'I13'}, wifi:'MQTT báo trạng thái giao hàng', k:['K1','K2','K4']},
+  {id:17, lv:3, n:'Trạm thời tiết online', pw:'adp', d:'Đo nhiệt độ, độ ẩm, ánh sáng, mưa và gửi lên mạng để vẽ đồ thị theo ngày.', stem:'thu thập dữ liệu, đồ thị, thống kê', c:{A1:'I5', A2:'I10', I2C:['O3','I6']}, wifi:PHONE},
+  {id:18, lv:3, n:'Vườn thông minh', pw:'adp', d:'Đất khô thì tự bơm nước; theo dõi và tưới từ xa bằng điện thoại.', stem:'độ ẩm đất, tưới tự động, điều khiển từ xa', c:{A1:'I9', D1:'O5', D2:'O4', I2C:['O3','I6']}, wifi:PHONE},
+  {id:19, lv:3, n:'Giám sát năng lượng', pw:'bat', d:'Đo điện áp, dòng và công suất của pin; ước tính thời gian chạy còn lại.', stem:'điện áp, dòng điện, công suất, dung lượng pin', c:{I2C:['O3']}, wifi:PHONE},
+  {id:20, lv:3, n:'Điểm danh RFID', pw:'adp', d:'Quẹt thẻ để điểm danh; tên và giờ đến được gửi lên máy chủ của lớp.', stem:'cơ sở dữ liệu, giao tiếp máy chủ', c:{D1:'O2', I2C:['O3'], SPI:'I13'}, wifi:'Gửi dữ liệu lên máy chủ của lớp'},
+  {id:21, lv:4, n:'Xe cân bằng 2 bánh', pw:'bat', d:'Xe đứng thăng bằng trên hai bánh như con lắc ngược, tự giữ khi bị đẩy nhẹ.', stem:'con lắc ngược, trọng tâm, PID lồng nhau', c:{I2C:['S1','S3']}, k:['K1','K2']},
+  {id:22, lv:4, n:'Xe cân bằng qua điện thoại', pw:'bat', d:'Xe cân bằng chạy tiến, lùi, rẽ theo điện thoại; chỉnh tham số PID từ xa.', stem:'chỉnh tham số từ xa, đo đạc và so sánh', c:{I2C:['S1','S3']}, wifi:'Điều khiển và chỉnh PID từ điện thoại', k:['K1','K2']},
+  {id:23, lv:4, n:'Cánh tay robot', pw:'bat', d:'Cánh tay bốn khớp gắp vật bằng joystick; ghi lại rồi tự lặp lại chuỗi động tác.', stem:'động học, góc khớp, ghi và phát lại chuyển động', c:{A1:'I3', I2C:['O7']}, extra:['O6'], k:['K4']},
+  {id:24, lv:4, n:'Băng tải phân loại màu', pw:'bat', d:'Băng tải đưa vật qua cảm biến màu, tay gạt servo đẩy vật vào đúng ô.', stem:'ánh sáng và màu sắc, tự động hóa dây chuyền', c:{I2C:['S1','I14','O3'], SV:['O6']}, att:{S1:'+ động cơ băng tải'}, k:['K4']},
+  {id:25, lv:4, n:'Dự án mở', pw:'usb', open:true, d:'Học sinh tự chọn vấn đề, tự chọn module và làm sản phẩm dự thi khoa học kỹ thuật.', stem:'quy trình thiết kế kỹ thuật', c:{}}
+];
+const PW = {usb:'Cáp USB từ máy tính', adp:'Adapter USB-C 5 V / 2 A'};
+const DA = ['A1','A2','A3','D1','D2','D3'];
+
+const modsOf = p => {
+  const s = new Set(['C1']);
+  if (p.pw === 'bat') s.add('C2');
+  Object.values(p.c).forEach(v => [].concat(v).forEach(m => s.add(m)));
+  (p.extra || []).forEach(m => s.add(m));
+  (p.k || []).forEach(m => s.add(m));
+  return s;
+};
+const USES = {};
+Object.keys(M).forEach(m => USES[m] = []);
+P.forEach(p => modsOf(p).forEach(m => USES[m].push(p.id)));
+
+const state = {tab:'proj', lv:1, proj:10, mod:'S1'};
+const $ = id => document.getElementById(id);
+
+const chip = (m, att, pressed) =>
+  `<button class="chip t-${M[m].t}" data-mod="${m}"${pressed ? ' aria-pressed="true"' : ''}><span class="code">${m}</span><span>${M[m].n}</span>${att ? `<span class="att">${att}</span>` : ''}</button>`;
+const pick = (p, pressed) =>
+  `<button class="pick" data-proj="${p.id}" aria-pressed="${pressed}"><span class="num">${p.id}</span>${p.n}</button>`;
+
+function row(label, pcls, wcls, items) {
+  if (!items.length) return `<div class="row off"><span class="port ${pcls}">${label}</span><span class="empty">trống</span></div>`;
+  return `<div class="row"><span class="port ${pcls}">${label}</span><div class="run ${wcls}">${items.map(h => `<span class="w"></span>${h}`).join('')}</div></div>`;
+}
+
+function renderProject() {
+  const p = P.find(x => x.id === state.proj), lv = LV[p.lv], c = p.c;
+  const att = m => (p.att && p.att[m]) || ATT[m];
+  const one = m => m ? [chip(m, att(m))] : [];
+  let rows = `<div class="row"><span class="bhead">C1<br>BO CHỦ</span><span></span></div>`;
+  rows += row('NGUỒN', 'p-pwr', 'wc-pwr', [p.pw === 'bat' ? chip('C2', c.I2C && c.I2C.includes('S1') ? '7,4 V sang S1' : (c.I2C && c.I2C.includes('O7') ? '7,4 V sang O7' : '')) : `<span class="note">${PW[p.pw]}</span>`]);
+  DA.forEach(k => rows += row(k, 'p-da', 'wc-da', one(c[k])));
+  rows += row('I2C', 'p-i2c', 'wc-i2c', (c.I2C || []).map(m => chip(m, att(m))));
+  rows += row('SPI', 'p-spi', 'wc-spi', one(c.SPI));
+  rows += row('SERVO', 'p-sv', 'wc-sv', (c.SV || []).map(m => chip(m)));
+  rows += row('TRÊN BO', 'p-on', 'wc-da', (p.on || []).map(t => `<span class="note">${t}</span>`));
+  rows += row('WIFI', 'p-on', 'wc-da', p.wifi ? [`<span class="note">${p.wifi}</span>`] : []);
+  const count = [...modsOf(p)].filter(m => M[m].t !== 'mech').length;
+  $('pdetail').innerHTML = `
+    <div class="group">
+      <h2>${p.id} · ${p.n}</h2>
+      <p class="meta">Cấp ${p.lv + 1}: ${lv.n} · ${lv.age}${p.open ? '' : ` · ${count} module điện tử`}</p>
+    </div>
+    <p class="what">${p.d}</p>
+    <p class="stem"><b>Kiến thức STEM:</b> ${p.stem}</p>
+    ${p.open ? '<p class="note">Không có sơ đồ cố định. Học sinh chọn module ở tab Module và tự thiết kế cách nối.</p>' : `
+    ${window.THREE ? `<div class="group" id="g3d"><h3>Mô hình 3D</h3>
+      <div class="stage" id="stage"><div class="zoom"><button data-zoom="0.85" aria-label="Phóng to">+</button><button data-zoom="1.18" aria-label="Thu nhỏ">−</button></div></div>
+      <p class="hint">Kéo để xoay, bấm + hoặc − để phóng to, thu nhỏ. Nhãn trên mô hình là mã module trong sơ đồ nối bên dưới. Mô hình minh họa cách bố trí, không đúng tỉ lệ.</p></div>` : ''}
+    <div class="group"><h3>Sơ đồ nối</h3><div class="dg">${rows}</div></div>
+    ${p.k ? `<div class="extra"><span>Cơ khí:</span>${p.k.map(m => chip(m)).join('')}</div>` : ''}
+    <div class="legend">
+      <span class="wc-da"><i></i>Cổng D/A</span><span class="wc-i2c"><i></i>I2C, nối chuỗi</span>
+      <span class="wc-spi"><i></i>SPI</span><span class="wc-sv"><i></i>Servo</span><span class="wc-pwr"><i></i>Nguồn</span>
+    </div>`}`;
+  if (!p.open) mount3d(p);
+}
+
+function renderProjTab() {
+  $('levels').innerHTML = LV.map((l, i) =>
+    `<button data-lv="${i}" aria-pressed="${i === state.lv}"><span class="lvn">Cấp ${i + 1} · ${l.n}</span><small>${l.age} · ${l.s}</small></button>`).join('');
+  $('picks').innerHTML = P.filter(p => p.lv === state.lv).map(p => pick(p, p.id === state.proj)).join('');
+  renderProject();
+}
+
+function renderModTab() {
+  const m = state.mod, o = M[m], u = USES[m];
+  const byLv = LV.map((l, i) => ({l, i, ps: P.filter(p => p.lv === i && u.includes(p.id))})).filter(g => g.ps.length);
+  $('mdetail').innerHTML = `
+    <div class="group">
+      <span class="badge t-${o.t}">${TYPES[o.t]}</span>
+      <h2>${m} · ${o.n}</h2>
+    </div>
+    <p class="what">${o.d}</p>
+    <dl class="kv"><dt>Cách nối</dt><dd>${o.port}</dd><dt>Số dự án dùng</dt><dd>${u.length} / ${P.length}</dd></dl>
+    ${byLv.map(g => `<div class="group"><h3>Cấp ${g.i + 1} · ${g.l.n}</h3><div class="picks">${g.ps.map(p => pick(p, false)).join('')}</div></div>`).join('')}`;
+  $('mlist').innerHTML = Object.keys(TYPES).map(t =>
+    `<div class="group"><h3>${TYPES[t]}</h3><div class="picks">${Object.keys(M).filter(k => M[k].t === t).map(k =>
+      `<button class="chip t-${t}" data-mod="${k}" aria-pressed="${k === m}"><span class="code">${k}</span><span>${M[k].n}</span><span class="cnt">${USES[k].length}</span></button>`).join('')}</div></div>`).join('');
+}
+
+function renderMatrix() {
+  const start = id => { const p = P.find(x => x.id === id), i = P.indexOf(p); return i === 0 || P[i - 1].lv !== p.lv ? ' lvstart' : ''; };
+  $('matrix').innerHTML = `<table><thead><tr><th class="corner">Module \\ Dự án</th>${P.map(p =>
+      `<th class="${start(p.id).trim()}"><button data-proj="${p.id}" title="${p.n}" aria-label="Dự án ${p.id}: ${p.n}">${p.id}</button></th>`).join('')}</tr></thead><tbody>${
+    Object.keys(M).map(m => `<tr class="t-${M[m].t}"><th class="mh"><button data-mod="${m}"><span class="code">${m}</span>${M[m].n}</button></th>${P.map(p =>
+      `<td class="${start(p.id).trim()}">${USES[m].includes(p.id) ? '<i></i>' : ''}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  $('tlegend').innerHTML = Object.keys(TYPES).map(t => `<span class="t-${t}"><span class="dot"></span>${TYPES[t]}</span>`).join('');
+}
+
+function render() {
+  ['proj', 'mod', 'mat'].forEach(t => {
+    $('v-' + t).hidden = state.tab !== t;
+    $('tab-' + t).setAttribute('aria-selected', state.tab === t);
+  });
+  if (state.tab === 'proj') renderProjTab();
+  else if (state.tab === 'mod') renderModTab();
+  else renderMatrix();
+}
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  const d = b.dataset;
+  if (d.zoom) { zoom3d(+d.zoom); return; }
+  if (d.tab) state.tab = d.tab;
+  else if (d.lv !== undefined) { state.lv = +d.lv; state.proj = P.find(p => p.lv === state.lv).id; }
+  else if (d.proj) { state.proj = +d.proj; state.lv = P.find(p => p.id === state.proj).lv; state.tab = 'proj'; }
+  else if (d.mod) { state.mod = d.mod; state.tab = 'mod'; }
+  else return;
+  render();
+  if (d.proj || d.mod) document.querySelector('.tabs').scrollIntoView({block:'start', behavior:'auto'});
+});
+
+/* ---------- Mô hình 3D ---------- */
+const T3 = {core:0x14605a, smart:0x7a3fd1, in:0x2b7fd0, out:0xd9731e, mech:0x8a8178};
+const SIZE = {C1:[8,6], C2:[7,4], S1:[5,4], S2:[9,1.6], O7:[6,3], I13:[4,6], I4:[4,4], O2:[6,1.2], O3:[3,3]};
+const PI = Math.PI;
+let R3 = null, G = null, sway = null, az = .75, el = .5, dist = 62, auto = true;
+const v = (x, y, z) => new THREE.Vector3(x, y, z);
+const mat = c => new THREE.MeshLambertMaterial({color:c});
+const glow = c => new THREE.MeshLambertMaterial({color:c, emissive:c, emissiveIntensity:.75});
+function add(geo, c, x, y, z, p) { const m = new THREE.Mesh(geo, c.isMaterial ? c : mat(c)); m.position.set(x, y, z); (p || G).add(m); return m; }
+const box = (w, h, d, c, x, y, z, p) => add(new THREE.BoxGeometry(w, h, d), c, x, y, z, p);
+const cyl = (r, h, c, x, y, z, p, rt) => add(new THREE.CylinderGeometry(rt === undefined ? r : rt, r, h, 24), c, x, y, z, p);
+const ball = (r, c, x, y, z, p) => add(new THREE.SphereGeometry(r, 18, 12), c, x, y, z, p);
+const lay = m => { m.rotation.x = PI / 2; return m; };
+function rod(a, b, r, c, p) {
+  const d = v(0, 0, 0).subVectors(b, a), m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, d.length(), 8), mat(c));
+  m.position.copy(a).addScaledVector(d, .5);
+  m.quaternion.setFromUnitVectors(v(0, 1, 0), d.clone().normalize());
+  (p || G).add(m); return m;
+}
+const ground = (w, d, c) => box(w, .5, d, c || 0xdfe4e2, 0, -.25, 0);
+
+function label(code, x, y, z, p) {
+  const c = document.createElement('canvas'); c.width = 128; c.height = 64;
+  const k = c.getContext('2d'), r = 14;
+  k.fillStyle = '#' + T3[M[code].t].toString(16).padStart(6, '0');
+  k.beginPath(); k.moveTo(r, 4); k.arcTo(124, 4, 124, 60, r); k.arcTo(124, 60, 4, 60, r); k.arcTo(4, 60, 4, 4, r); k.arcTo(4, 4, 124, 4, r); k.fill();
+  k.fillStyle = '#ffffff'; k.font = '600 34px "JetBrains Mono", monospace'; k.textAlign = 'center'; k.textBaseline = 'middle';
+  k.fillText(code, 64, 34);
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c), depthTest:false}));
+  s.scale.set(2.8, 1.4, 1); s.position.set(x, y, z); s.renderOrder = 5; (p || G).add(s); return s;
+}
+
+const DECO = {
+  _: g => box(1, .3, 1, 0x1b2221, 0, .55, 0, g),
+  C1: g => { box(2.2, .5, 2.6, 0xb9c2bf, 0, .65, -1, g); for (let i = 0; i < 6; i++) box(.8, .5, .5, 0xf1f1ec, -3 + i * 1.2, .65, 2.5, g); box(.9, .5, .6, 0x2f6fe4, -3.4, .65, -2.5, g); box(.9, .5, .6, 0xe2b714, 3.4, .65, -2.5, g); },
+  C2: g => { for (const z of [-.95, .95]) { cyl(.9, 6.2, 0x3a7bd5, 0, 1.3, z, g).rotation.z = PI / 2; } },
+  S1: g => { box(1.4, .3, 1.4, 0x1b2221, -.8, .55, 0, g); box(1.2, .5, .8, 0xc9451a, 1.6, .65, -1.2, g); box(1.2, .5, .8, 0xc9451a, 1.6, .65, 1.2, g); },
+  S2: (g, w) => { for (let i = 0; i < 8; i++) box(.5, .3, .5, 0x1b2221, -w / 2 + .9 + i * 1.03, -.15, 0, g); },
+  S3: g => box(.9, .25, .9, 0x1b2221, 0, .52, 0, g),
+  I1: g => { cyl(.5, .5, 0xd94a3a, -.8, .65, 0, g); cyl(.5, .5, 0x3a7bd5, .8, .65, 0, g); },
+  I2: g => cyl(.8, 1.2, 0x2a3230, 0, 1, 0, g),
+  I3: g => { cyl(.25, 1.6, 0x2a3230, 0, 1.2, 0, g); ball(.6, 0x2a3230, 0, 2.1, 0, g); },
+  I4: g => { for (let i = 0; i < 16; i++) box(.6, .25, .6, 0xf1f1ec, -1.2 + (i % 4) * .8, .52, -1.2 + (i >> 2) * .8, g); },
+  I7: g => ball(.9, 0xf1f1ec, 0, .4, 0, g),
+  I8: g => cyl(.9, 1.2, 0xb9bfbd, 0, 1, 0, g),
+  I11: g => { lay(cyl(.7, .8, 0xb9bfbd, -.8, 1.1, .4, g)); lay(cyl(.7, .8, 0xb9bfbd, .8, 1.1, .4, g)); },
+  I13: g => box(3, .1, 3, 0xd8b84a, 0, .46, -1, g),
+  O1: g => { ball(.4, glow(0xe5483a), -.8, .75, 0, g); ball(.4, glow(0x37c26b), .8, .75, 0, g); },
+  O2: g => { [0xe5483a, 0xf0a030, 0xf2d83b, 0x37c26b, 0x31c4c4, 0x3a7bd5, 0x8a55e0, 0xe055b0].forEach((c, i) => ball(.28, glow(c), -2.45 + i * .7, .6, 0, g)); },
+  O3: g => { box(2.5, .15, 1.7, 0x0b0f10, 0, .48, 0, g); box(1.6, .16, .22, glow(0x56e0d0), -.2, .5, -.3, g); box(1.1, .16, .22, glow(0x56e0d0), -.45, .5, .2, g); },
+  O4: g => box(1.5, 1.3, 1.7, 0x2b6cc4, 0, 1.05, 0, g),
+  O5: g => { cyl(1.3, .5, 0x2a3230, 0, .65, 0, g); box(2.2, .2, .4, 0xb9bfbd, 0, 1, 0, g); box(.4, .2, 2.2, 0xb9bfbd, 0, 1, 0, g); },
+  O6: g => { box(2.3, 1.9, 1.2, 0x2b6cc4, 0, 1.35, 0, g); cyl(.35, .4, 0xf1f1ec, .6, 2.5, 0, g); box(1.8, .15, .4, 0xf1f1ec, .6, 2.72, 0, g); },
+  O7: g => { box(1.2, .3, 1.2, 0x1b2221, -1.6, .55, 0, g); for (let i = 0; i < 6; i++) box(.3, .7, .9, 0xe2b714, -.2 + i * .5, .75, .6, g); }
+};
+
+/* Một module = tấm mạch màu theo loại + chi tiết nhận dạng + nhãn mã module. */
+function mod(code, x, y, z, o) {
+  o = o || {};
+  const par = o.p || G, g = new THREE.Group(), sz = SIZE[code] || [3.2, 2.4], w = sz[0], d = sz[1];
+  g.position.set(x, y, z);
+  if (o.ry) g.rotation.y = o.ry;
+  if (o.wall === 'b') g.rotation.x = PI / 2;
+  if (o.wall === 'r') g.rotation.z = -PI / 2;
+  par.add(g);
+  box(w, .4, d, T3[M[code].t], 0, .2, 0, g);
+  (DECO[code] || DECO._)(g, w, d);
+  if (o.lp) label(code, o.lp[0], o.lp[1], o.lp[2], par);
+  else if (o.wall === 'b') label(code, x, y + d / 2 + 1.1, z + .8, par);
+  else if (o.wall === 'r') label(code, x + 1.2, y + w / 2 + 1.1, z, par);
+  else label(code, x, y + 2.9, z, par);
+  return g;
+}
+
+function bench(p) {
+  ground(36, 28);
+  const c = p.c, W = {da:0x8f9b98, i2c:0x2f6fe4, spi:0xd9a900, sv:0x3a4442, pwr:0xc9451a};
+  const wire = (a, b, col) => rod(v(a[0], .55, a[1]), v(b[0], .55, b[1]), .14, col);
+  mod('C1', 0, 0, 0);
+  const da = DA.filter(k => c[k]);
+  da.forEach((k, i) => { const z = (i - (da.length - 1) / 2) * 5; mod(c[k], -12, 0, z); wire([-4, z * .3], [-10.4, z], W.da); });
+  let prev = [4, 0];
+  (c.I2C || []).forEach((m, i, a) => { const z = (i - (a.length - 1) / 2) * 6.5; mod(m, 12, 0, z); wire(prev, [12, z], W.i2c); prev = [12, z]; });
+  if (c.SPI) { mod(c.SPI, -5, 0, -10); wire([-2, -3], [-5, -7], W.spi); }
+  (c.SV || []).forEach((m, i) => { mod(m, 4 + i * 5, 0, -10); wire([2, -3], [4 + i * 5, -9], W.sv); });
+  if (p.pw === 'bat') { mod('C2', 0, 0, 10); wire([0, 3], [0, 8], W.pwr); }
+}
+
+function house(p) {
+  const h = modsOf(p), has = m => h.has(m), sv = (p.c.SV || []).length, wall = 0xe9ecea;
+  const door = has('I13') || has('I4');
+  ground(40, 32, 0xa9bfa2);
+  box(24, .4, 16, 0xdccfb9, -2, .2, -2);
+  box(24, 10, .5, 0xf1f3f2, -2, 5.4, -10.2);
+  box(.5, 10, 16, wall, -14.2, 5.4, -2);
+  box(.5, 10, 10, wall, 10.2, 5.4, -5);
+  box(.5, 2.5, 4.4, wall, 10.2, 9.15, 2.2); box(.5, 10, .5, wall, 10.2, 5.4, 4.4);
+  box(5, 3.5, .7, 0x9fd3ea, -8, 6.6, -10.2);
+  const dg = new THREE.Group(); dg.position.set(10.2, .4, 0); dg.rotation.y = door ? -.7 : 0; G.add(dg);
+  box(.3, 7.5, 4, 0x9a6b3f, 0, 3.75, 2, dg);
+  mod('C1', -1, .4, -5);
+  if (has('O3')) mod('O3', 2, 6.5, -9.9, {wall:'b'});
+  if (has('I6')) mod('I6', 6, 6.5, -9.9, {wall:'b'});
+  if (has('I5')) mod('I5', -8, 3.2, -9.7, {wall:'b', lp:[-8, 2, -8.9]});
+  if (has('I7')) mod('I7', -3, 8.4, -9.9, {wall:'b', lp:[-3, 6.6, -9.1]});
+  if (has('O2')) mod('O2', 3, 9.4, -9.9, {wall:'b', lp:[7.6, 9.4, -9.1]});
+  if (has('I8')) { box(3.4, 2.4, 2.6, 0x7b8582, 7.5, 1.6, -8.4); mod('I8', 7.5, 2.8, -8.4, {lp:[7.5, 1.6, -6.4]}); }
+  if (has('I2')) mod('I2', 5, .4, -3);
+  if (has('O4') || has('O1')) { rod(v(-7, 10.4, -4), v(-7, 8.2, -4), .1, 0x2a3230); ball(.9, glow(0xffd76a), -7, 7.4, -4); }
+  if (has('O4')) mod('O4', -11, .4, -7);
+  if (has('O1')) mod('O1', -11.4, 8.6, -9.9, {wall:'b', lp:[-11.4, 6.9, -9.1]});
+  if (has('O5')) mod('O5', -9, .4, 1.5);
+  if (has('I13')) mod('I13', 10.5, 5, -3.3, {wall:'r'});
+  if (has('I4')) mod('I4', 10.5, 5, -8.2, {wall:'r'});
+  if (door && sv) mod('O6', 10.5, 9.1, 2.2, {wall:'r', lp:[12, 11.4, 2.2]});
+  if (has('I10')) {
+    mod('I10', -10, 0, 11);
+    if (sv && (!door || sv > 1)) {
+      rod(v(-2, 0, 11), v(-2, 6, 11), .25, 0x8a8178); rod(v(8, 0, 11), v(8, 6, 11), .25, 0x8a8178); rod(v(-2, 6, 11), v(8, 6, 11), .15, 0x8a8178);
+      [[0, 0xe5483a], [3, 0x3a7bd5], [6, 0xf2d83b]].forEach(a => box(1.8, 2.6, .15, a[1], a[0], 4.6, 11));
+      mod('O6', -5, 0, 12.5);
+    }
+  }
+}
+
+function car(p) {
+  const h = modsOf(p), has = m => h.has(m), id = p.id;
+  ground(46, 34, 0xe9ecea);
+  let cz = 0;
+  if (has('S2')) { const t = add(new THREE.TorusGeometry(10, .45, 6, 56), 0x1b1f20, 0, .06, 0); t.scale.set(1.5, 1, .1); t.rotation.x = PI / 2; cz = 10; }
+  if (id === 16) { box(4, 3, 3, 0x2b7fd0, 0, 1.5, -14); box(4, 3, 3, 0xd9731e, 19.5, 1.5, 0); box(1.8, .1, 1.8, 0xd8b84a, 0, .12, -10); box(1.8, .1, 1.8, 0xd8b84a, 15, .12, 0); }
+  if (id === 12) { box(3, 5, 3, 0xb5673c, 15, 2.5, 3); box(4, 4, 3, 0x7b8582, 13, 2, -8); cyl(1.6, 5, 0x9a6b3f, -14, 2.5, -9); }
+  if (id === 15) { const q = [[-8, -8], [8, -8], [8, 8], [-8, 8]]; q.forEach((a, i) => { const b = q[(i + 1) % 4]; rod(v(a[0], .1, a[1]), v(b[0], .1, b[1]), .2, 0xe5483a); }); cz = 8; }
+  if (id === 11) { box(2, .6, 4.4, 0x2a3230, 14, .3, 10); cyl(.35, .2, 0xe5483a, 14, .7, 9); }
+  const g = new THREE.Group(); g.position.set(0, 0, cz); G.add(g);
+  box(18, .4, 9, 0xf5f6f5, 0, 3.4, 0, g);
+  for (const s of [-1, 1]) {
+    lay(cyl(3.2, 1.4, 0x23292a, -5, 3.2, s * 5.4, g)); lay(cyl(1.1, 1.5, 0xc9d1ce, -5, 3.2, s * 5.4, g));
+    lay(cyl(1.1, 3.2, 0xb9bfbd, -5, 2.1, s * 2.6, g));
+  }
+  label('K1', -5, 3.2, 7.6, g);
+  ball(1, 0x8a8178, 8.2, 1, 0, g); box(1.2, 1.3, 1.2, 0x8a8178, 8.2, 2.6, 0, g);
+  mod('S1', -6.5, 3.6, 0, {p:g, ry:PI / 2});
+  mod('C1', 0, 3.6, 0, {p:g, ry:PI / 2});
+  mod('C2', -.5, 1, 0, {p:g, lp:[-.5, 1.6, -6]});
+  if (has('S2')) { box(.4, 2.2, 2, 0x8a8178, 9.2, 2.3, 0, g); mod('S2', 10, 1, 0, {p:g, ry:PI / 2, lp:[11.6, 2.6, 0]}); }
+  if (has('I11')) { mod('O6', 6.5, 3.6, 0, {p:g, lp:[6.5, 4.6, 3.4]}); mod('I11', 6.9, 6.4, 0, {p:g, ry:PI / 2}); }
+  if (has('I12')) mod('I12', 6.5, 3.6, 0, {p:g});
+  if (has('O3')) mod('O3', 6.5, 3.6, 2.4, {p:g});
+  if (has('S3')) mod('S3', 6.5, 3.6, -2.6, {p:g});
+  if (has('I13')) mod('I13', 5.2, 2.3, 0, {p:g, lp:[5.2, 5.6, 0]});
+}
+
+function balance(p) {
+  ground(34, 24, 0xe9ecea);
+  const b = new THREE.Group(); b.position.set(0, 3.2, 0); G.add(b); sway = b;
+  for (const s of [-1, 1]) {
+    lay(cyl(3.2, 1.4, 0x23292a, 0, 0, s * 5.6, b)); lay(cyl(1.1, 1.5, 0xc9d1ce, 0, 0, s * 5.6, b));
+    lay(cyl(1.1, 3, 0xb9bfbd, 0, 0, s * 2.4, b));
+  }
+  label('K1', 0, 0, 7.8, b);
+  [1.3, 6.3, 11.3].forEach(y => box(6, .3, 8, 0xf5f6f5, 0, y, 0, b));
+  for (const x of [-2.6, 2.6]) for (const z of [-3.6, 3.6]) rod(v(x, 1.3, z), v(x, 11.3, z), .15, 0xb9bfbd, b);
+  mod('S1', 0, 1.45, -1.6, {p:b, lp:[-5, 2.6, -1.6]});
+  mod('S3', 0, 1.45, 2.5, {p:b, ry:PI / 2, lp:[5, 2.6, 2.5]});
+  mod('C1', 0, 6.45, 0, {p:b, ry:PI / 2, lp:[-5, 7.8, 0]});
+  mod('C2', 0, 11.45, 0, {p:b, ry:PI / 2});
+  if (p.wifi) { box(3.4, .4, 6.4, 0x15201e, 11, .2, 7); box(2.8, .1, 5.4, glow(0x56c8d8), 11, .42, 7); }
+}
+
+function arm(p) {
+  ground(38, 28, 0xe9ecea);
+  cyl(3.2, 1.2, 0x2a3230, 0, .6, 0);
+  const j = (par, y, rz, ry) => { const g = new THREE.Group(); g.position.y = y; g.rotation.z = rz || 0; g.rotation.y = ry || 0; par.add(g); box(2.2, 1.6, 1.4, 0x2b6cc4, 0, 0, 0, g); return g; };
+  const g1 = j(G, 2, 0, .5); box(1.1, 7, 1.1, 0xf5f6f5, 0, 4.2, 0, g1);
+  const g2 = j(g1, 8.4, -1); box(1.1, 6, 1.1, 0xf5f6f5, 0, 3.7, 0, g2);
+  const g3 = j(g2, 7.4, -1.2); box(1, 2.6, 1, 0xf5f6f5, 0, 2, 0, g3);
+  const g4 = j(g3, 3.9, 0); box(.4, 2.4, .6, 0x2a3230, -.8, 1.8, 0, g4); box(.4, 2.4, .6, 0x2a3230, .8, 1.8, 0, g4);
+  label('O6', -2.6, 0, 0, g1); label('O6', 0, 2.2, 0, g2); label('O6', 0, 2.2, 0, g3);
+  box(1.6, 1.6, 1.6, 0xd94a3a, 9, .8, -5);
+  mod('O7', -11, 0, 5.5); mod('C1', -11, 0, -5); mod('C2', 9, 0, 8); mod('I3', 1, 0, 9.5);
+}
+
+function conveyor(p) {
+  ground(46, 28, 0xe9ecea);
+  box(26, .6, 5, 0x23292a, 0, 3.3, 0);
+  for (const x of [-13, 13]) lay(cyl(.9, 5, 0xb9bfbd, x, 3.3, 0));
+  for (const x of [-11, 11]) for (const z of [-2, 2]) box(.5, 3, .5, 0x8a8178, x, 1.5, z);
+  [[-9, 0xe5483a], [-4.5, 0x37c26b], [3, 0x3a7bd5]].forEach(a => box(1.5, 1.5, 1.5, a[1], a[0], 4.35, 0));
+  for (const z of [-3.2, 3.2]) rod(v(-1, 0, z), v(-1, 8.5, z), .25, 0x8a8178);
+  box(.6, .5, 7, 0x8a8178, -1, 8.5, 0);
+  mod('I14', -1, 7.4, 0);
+  box(2.6, 3.6, 2, 0x8a8178, 6, 1.8, -4.4); mod('O6', 6, 3.6, -4.4); box(.3, 1, 5, 0xf1f1ec, 6.6, 4.6, -1.4);
+  [[2, 0xe5483a], [6, 0x37c26b], [10, 0x3a7bd5]].forEach(a => box(3.4, 1.6, 3.4, a[1], a[0], .8, 5.6));
+  lay(cyl(1.1, 3, 0xb9bfbd, 14.4, 3.3, 3.6));
+  mod('S1', 18, 0, 8); mod('C1', -15, 0, 9); mod('C2', -16, 0, -8);
+  if (modsOf(p).has('O3')) mod('O3', -5, 0, 10.5);
+}
+
+function garden(p) {
+  ground(38, 28);
+  cyl(3, 5, 0xb5673c, -6, 2.5, 0, G, 4.2); cyl(3.9, .3, 0x4a3a2c, -6, 5, 0);
+  rod(v(-6, 5, 0), v(-6, 9, 0), .2, 0x3f8f4a);
+  [[-6, 10, 0, 1.6], [-7.4, 8.4, .6, 1.1], [-4.8, 8.8, -.5, 1.2]].forEach(a => ball(a[3], 0x4fae5b, a[0], a[1], a[2]));
+  box(.9, 3.2, .25, T3.in, -4.2, 5.6, 1.4); label('I9', -3.2, 8.3, 2.4);
+  box(5, 5, 5, new THREE.MeshLambertMaterial({color:0x5aa9e6, transparent:true, opacity:.55}), 7, 2.5, -5);
+  mod('O5', 7, 0, 2.5);
+  rod(v(7, 5, -5), v(7, 7, -5), .18, 0x7b8582); rod(v(7, 7, -5), v(-4, 7, -1), .18, 0x7b8582); rod(v(-4, 7, -1), v(-4.6, 5.4, -.6), .18, 0x7b8582);
+  rod(v(-13, 0, -4), v(-13, 13.5, -4), .3, 0x8a8178); rod(v(-13, 13.5, -4), v(-6, 13.5, 0), .3, 0x8a8178);
+  box(6, .4, 1.4, glow(0xfff0a8), -6, 13.1, 0);
+  mod('O4', -13.5, 0, 3); mod('C1', 1, 0, 9); mod('O3', 10, 0, 10); mod('I6', -10, 0, 9.5);
+}
+
+function build3d(p) {
+  if (G) {
+    G.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } });
+    R3.scene.remove(G);
+  }
+  G = new THREE.Group(); sway = null; R3.scene.add(G);
+  const id = p.id; let f = bench, dd = 64;
+  if (id >= 5 && id <= 10) { f = house; dd = 78; }
+  else if (id >= 11 && id <= 16) { f = car; dd = 76; }
+  else if (id === 18) { f = garden; dd = 68; }
+  else if (id === 21 || id === 22) { f = balance; dd = 60; }
+  else if (id === 23) { f = arm; dd = 68; }
+  else if (id === 24) { f = conveyor; dd = 76; }
+  dist = dd; f(p);
+}
+
+function init3d() {
+  const cv = document.createElement('canvas'); cv.setAttribute('aria-label', 'Mô hình 3D của dự án');
+  const renderer = new THREE.WebGLRenderer({canvas:cv, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(32, 1.6, 1, 500);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x9aa5a2, .95));
+  const dl = new THREE.DirectionalLight(0xffffff, .55); dl.position.set(20, 40, 25); scene.add(dl);
+  let drag = null;
+  cv.addEventListener('pointerdown', e => { drag = [e.clientX, e.clientY]; auto = false; try { cv.setPointerCapture(e.pointerId); } catch (_) {} });
+  cv.addEventListener('pointermove', e => {
+    if (!drag) return;
+    az -= (e.clientX - drag[0]) * .008;
+    el = Math.min(1.35, Math.max(.1, el + (e.clientY - drag[1]) * .006));
+    drag = [e.clientX, e.clientY];
+  });
+  const end = () => { drag = null; };
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  function size() {
+    const s = cv.parentElement; if (!s) return;
+    const w = s.clientWidth, h = s.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+  }
+  const ro = new ResizeObserver(size);
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  (function tick(t) {
+    requestAnimationFrame(tick);
+    if (!cv.isConnected || state.tab !== 'proj' || document.hidden) return;
+    if (auto && !still) az += .0025;
+    if (sway && !still) sway.rotation.z = Math.sin((t || 0) / 700) * .05;
+    const c = Math.cos(el);
+    cam.position.set(Math.sin(az) * c * dist, Math.sin(el) * dist + 4, Math.cos(az) * c * dist);
+    cam.lookAt(0, 4, 0);
+    renderer.render(scene, cam);
+  })(0);
+  R3 = {cv, scene, ro, size};
+}
+
+function mount3d(p) {
+  const st = $('stage'); if (!st || !window.THREE) return;
+  try { if (!R3) init3d(); } catch (e) { $('g3d').hidden = true; return; }
+  R3.ro.disconnect(); st.prepend(R3.cv); R3.ro.observe(st);
+  build3d(p); R3.size();
+}
+function zoom3d(k) { dist = Math.min(150, Math.max(28, dist * k)); }
+
+const elec = Object.keys(M).filter(m => M[m].t !== 'mech').length;
+$('facts').innerHTML = `<span><b>${P.length}</b> dự án</span><span><b>${LV.length}</b> cấp độ</span><span><b>${elec}</b> module điện tử</span><span><b>3</b> module thông minh tự thiết kế</span><span>Học sinh <b>12–18</b> tuổi</span><span>Lập trình kéo thả <b>MicroBlocks</b></span>`;
+render();
+</script>
+</body></html>
