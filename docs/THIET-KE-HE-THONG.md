@@ -423,7 +423,13 @@ Phụ thuộc giữa các gói:
 
 ## 12. Kế hoạch clone và tùy biến MicroBlocks
 
-Trạng thái (14/11/2026): đã chọn **mức 3, fork cả phần mềm lập trình**. Bản fork đang nằm trên một máy khác và **chưa tích hợp vào dự án này**. Khi tích hợp, đặt nó ở `microblocks/` (thư mục này đã được khai báo trong `.gitignore` của kho bộ kit).
+Trạng thái (14/11/2026): đã chọn **mức 3, fork cả phần mềm lập trình**, và bản fork **đã được đưa vào kho này** ở thư mục `Iris blocks/` (commit `0afe355`, 991 tệp, khoảng 55 MB). Mục 12.1–12.3 bên dưới là kế hoạch ban đầu, giữ lại để tham khảo.
+
+Hiện trạng của `Iris blocks/`:
+- **Nguồn gốc** ghi trong `Iris blocks/DOC-STNAPP.md`: https://codeberg.org/MicroBlocks/smallvm (bản "stnapp", lấy từ dự án stem-for-students).
+- **Giấy phép**: MPL 2.0, đã xác nhận qua tệp `LICENSE` trong thư mục. Tệp nào đã sửa phải giữ tiêu đề bản quyền và công bố mã nguồn theo MPL.
+- **Đã thay đổi so với bản gốc**: nhập thư viện khối trực tiếp từ đường dẫn GitHub; bản dịch tiếng Việt đủ 100% và là ngôn ngữ mặc định. Chi tiết trong `DOC-STNAPP.md`.
+- **Không kèm lịch sử git của MicroBlocks**: mã được chép vào như tệp thường. Muốn lấy bản cập nhật từ kho gốc sau này phải so sánh và hợp nhất thủ công.
 
 ### 12.1. Nguồn
 
@@ -464,4 +470,4 @@ git clone https://bitbucket.org/john_maloney/smallvm.git microblocks
 | `mechanical/` | Thiết kế cơ khí K1–K4 |
 | `projects/` | Chương trình mẫu của 25 dự án, chia theo 5 cấp độ |
 | `curriculum/` | Giáo án, phiếu bài học, tài liệu giáo viên |
-| `microblocks/` | Chưa có. Kho fork MicroBlocks, xem mục 12 |
+| `Iris blocks/` | Bản fork MicroBlocks (phần mềm lập trình và firmware máy ảo), xem mục 12 |

@@ -27,7 +27,7 @@ projects/       Chương trình mẫu 25 dự án, theo 5 cấp độ
 curriculum/     Giáo án, phiếu bài học
 ```
 
-`microblocks/` (kho fork MicroBlocks) chưa có; kế hoạch nằm ở mục 12 của tài liệu thiết kế.
+`Iris blocks/` là bản fork MicroBlocks (phần mềm lập trình và firmware máy ảo, giấy phép MPL 2.0). Các thay đổi so với bản gốc ghi trong [Iris blocks/DOC-STNAPP.md](Iris%20blocks/DOC-STNAPP.md); bối cảnh ở mục 12 của tài liệu thiết kế.
 
 ## Quy ước
 
