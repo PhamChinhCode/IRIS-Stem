@@ -1,0 +1,35 @@
+{
+ "J1": {
+  "fp": "Cong_PH_4P_Ngang",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -5.5,
+   -15.95,
+   5.49,
+   -7.26
+  ]
+ },
+ "J2": {
+  "fp": "PinSocket_1x03_P2.54mm_Vertical",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   -4.35,
+   3.19,
+   4.36,
+   6.81
+  ]
+ },
+ "R1": {
+  "fp": "R_0603_1608Metric",
+  "duoi": false,
+  "goc": 270,
+  "khung": [
+   -0.55,
+   -1.0,
+   1.0,
+   2.05
+  ]
+ }
+}

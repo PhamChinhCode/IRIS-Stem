@@ -1,0 +1,130 @@
+{
+ "C1": [
+  "hardware/C1-bo-chu/C1.STL",
+  1794079054.034494
+ ],
+ "C2": [
+  "mechanical/STEP/module/C2.step",
+  1794819370.1547327
+ ],
+ "I1": [
+  "mechanical/STEP/module/I1.step",
+  1794819370.6918173
+ ],
+ "I10": [
+  "mechanical/STEP/module/I10.step",
+  1794819373.7681067
+ ],
+ "I11": [
+  "mechanical/STEP/module/I11.step",
+  1794819374.1791294
+ ],
+ "I12": [
+  "mechanical/STEP/module/I12.step",
+  1794819374.474143
+ ],
+ "I13": [
+  "mechanical/STEP/module/I13.step",
+  1794819374.629947
+ ],
+ "I14": [
+  "mechanical/STEP/module/I14.step",
+  1794819374.9285462
+ ],
+ "I2": [
+  "mechanical/STEP/module/I2.step",
+  1794819371.000335
+ ],
+ "I3": [
+  "mechanical/STEP/module/I3.step",
+  1794819371.2921748
+ ],
+ "I4": [
+  "mechanical/STEP/module/I4.step",
+  1794819371.9048958
+ ],
+ "I5": [
+  "mechanical/STEP/module/I5.step",
+  1794819372.2044165
+ ],
+ "I6": [
+  "mechanical/STEP/module/I6.step",
+  1794819372.5332325
+ ],
+ "I7": [
+  "mechanical/STEP/module/I7.step",
+  1794819372.9625902
+ ],
+ "I8": [
+  "mechanical/STEP/module/I8.step",
+  1794819373.2622318
+ ],
+ "I9": [
+  "mechanical/STEP/module/I9.step",
+  1794819373.4686348
+ ],
+ "O1": [
+  "mechanical/STEP/module/O1.step",
+  1794819375.2402382
+ ],
+ "O2": [
+  "mechanical/STEP/module/O2.step",
+  1794819375.5700166
+ ],
+ "O3": [
+  "mechanical/STEP/module/O3.step",
+  1794819375.874133
+ ],
+ "O4": [
+  "mechanical/STEP/module/O4.step",
+  1794819376.1865873
+ ],
+ "O5": [
+  "mechanical/STEP/module/O5.step",
+  1794819376.4947104
+ ],
+ "O7": [
+  "mechanical/STEP/module/O7.step",
+  1794819376.5750482
+ ],
+ "S1": [
+  "mechanical/STEP/module/S1.step",
+  1794819370.2242727
+ ],
+ "S2": [
+  "mechanical/STEP/module/S2.step",
+  1794819370.3142228
+ ],
+ "S3": [
+  "mechanical/STEP/module/S3.step",
+  1794819370.3748357
+ ],
+ "ban_thuc_hanh": [
+  "mechanical/STEP/du_an/ban_thuc_hanh.step",
+  1794818956.5832984
+ ],
+ "bang_tai": [
+  "mechanical/STEP/du_an/bang_tai.step",
+  1794819006.497188
+ ],
+ "canh_tay_robot": [
+  "mechanical/STEP/du_an/canh_tay_robot.step",
+  1794819054.7041495
+ ],
+ "nha_thong_minh": [
+  "mechanical/STEP/du_an/nha_thong_minh.step",
+  1794819110.8002355
+ ],
+ "vuon_thong_minh": [
+  "mechanical/STEP/du_an/vuon_thong_minh.step",
+  1794819160.6469023
+ ],
+ "xe_can_bang": [
+  "mechanical/STEP/du_an/xe_can_bang.step",
+  1794819209.4958956
+ ],
+ "xe_do_line": [
+  "mechanical/STEP/du_an/xe_do_line.step",
+  1794819258.0828574
+ ]
+}

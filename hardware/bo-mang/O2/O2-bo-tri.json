@@ -1,0 +1,244 @@
+{
+ "J1": {
+  "fp": "Cong_PH_4P_Ngang",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -5.5,
+   -11.95,
+   5.49,
+   -3.26
+  ]
+ },
+ "LED1": {
+  "fp": "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -28.7,
+   -1.29,
+   -21.7,
+   4.29
+  ]
+ },
+ "LED2": {
+  "fp": "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -21.5,
+   -1.29,
+   -14.5,
+   4.29
+  ]
+ },
+ "LED3": {
+  "fp": "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -14.29,
+   -1.29,
+   -7.3,
+   4.29
+  ]
+ },
+ "LED4": {
+  "fp": "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -7.09,
+   -1.29,
+   -0.1,
+   4.29
+  ]
+ },
+ "LED5": {
+  "fp": "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   0.11,
+   -1.29,
+   7.09,
+   4.29
+  ]
+ },
+ "LED6": {
+  "fp": "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   7.3,
+   -1.29,
+   14.29,
+   4.29
+  ]
+ },
+ "LED7": {
+  "fp": "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   14.51,
+   -1.29,
+   21.49,
+   4.29
+  ]
+ },
+ "LED8": {
+  "fp": "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   21.71,
+   -1.29,
+   28.7,
+   4.29
+  ]
+ },
+ "U1": {
+  "fp": "SOT-23-5",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   6.45,
+   -6.94,
+   10.64,
+   -3.45
+  ]
+ },
+ "R1": {
+  "fp": "R_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   -23.05,
+   -5.5,
+   -21.5,
+   -2.45
+  ]
+ },
+ "TP1": {
+  "fp": "TestPoint_Pad_D1.5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   21.45,
+   -5.04,
+   24.04,
+   -2.45
+  ]
+ },
+ "C9": {
+  "fp": "C_0805_2012Metric",
+  "duoi": false,
+  "goc": 180,
+  "khung": [
+   -1.55,
+   5.0,
+   1.94,
+   7.05
+  ]
+ },
+ "C10": {
+  "fp": "C_0805_2012Metric",
+  "duoi": false,
+  "goc": 180,
+  "khung": [
+   -1.55,
+   8.0,
+   1.94,
+   10.05
+  ]
+ },
+ "C1": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -6.55,
+   5.0,
+   -3.5,
+   6.55
+  ]
+ },
+ "C2": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -6.55,
+   7.5,
+   -3.5,
+   9.05
+  ]
+ },
+ "C3": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   2.95,
+   5.0,
+   4.5,
+   8.05
+  ]
+ },
+ "C4": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   5.45,
+   5.0,
+   7.0,
+   8.05
+  ]
+ },
+ "C5": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   7.95,
+   5.0,
+   9.5,
+   8.05
+  ]
+ },
+ "C6": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   10.45,
+   5.0,
+   12.0,
+   8.05
+  ]
+ },
+ "C7": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   -9.05,
+   5.0,
+   -7.5,
+   8.05
+  ]
+ },
+ "C8": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   -11.55,
+   5.0,
+   -10.0,
+   8.05
+  ]
+ }
+}

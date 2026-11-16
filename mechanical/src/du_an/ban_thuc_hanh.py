@@ -7,8 +7,9 @@ from lib.kt import BG_L, BG_W
 from lib.mach import cum_gan
 
 # module: (u, v) trên bảng gá
-BO_TRI = {"C1": (-32, 32), "O3": (40, 40), "I6": (68, 48), "I1": (-68, -48), "O1": (-44, -48),
-          "I2": (-20, -48), "I5": (4, -48), "O2": (48, -52)}
+# module có vỏ rộng hơn bo 1,75 mm mỗi cạnh: hai module cạnh nhau cách thêm một bước lưới 8 mm
+BO_TRI = {"C1": (-32, 32), "O3": (40, 40), "I6": (68, -8), "I5": (36, -8), "I1": (-68, -48), "O1": (-36, -48),
+          "I2": (-4, -48), "O2": (48, -52)}
 
 
 @step(out="../../STEP/du_an/ban_thuc_hanh.step")

@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "IRIS") (type "KiCad") (uri "${KIPRJMOD}/../common/IRIS.pretty") (options "") (descr "Thư viện chung IRIS-Stem"))
+)

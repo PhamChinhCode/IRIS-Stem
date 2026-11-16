@@ -1,0 +1,244 @@
+{
+ "J1": {
+  "fp": "Cong_PH_4P_Ngang",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -5.5,
+   -31.95,
+   5.49,
+   -23.25
+  ]
+ },
+ "U2": {
+  "fp": "SOIC-16W_7.5x10.3mm_P1.27mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -19.98,
+   -23.95,
+   -8.03,
+   -13.05
+  ]
+ },
+ "SW1": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -19.3,
+   17.7,
+   -10.71,
+   24.3
+  ]
+ },
+ "SW2": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -9.29,
+   17.7,
+   -0.7,
+   24.3
+  ]
+ },
+ "SW3": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   0.7,
+   17.7,
+   9.3,
+   24.3
+  ]
+ },
+ "SW4": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   10.7,
+   17.7,
+   19.3,
+   24.3
+  ]
+ },
+ "SW5": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -19.3,
+   7.7,
+   -10.71,
+   14.3
+  ]
+ },
+ "SW6": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -9.29,
+   7.7,
+   -0.7,
+   14.3
+  ]
+ },
+ "SW7": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   0.7,
+   7.7,
+   9.3,
+   14.3
+  ]
+ },
+ "SW8": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   10.7,
+   7.7,
+   19.3,
+   14.3
+  ]
+ },
+ "SW9": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -19.3,
+   -2.3,
+   -10.71,
+   4.3
+  ]
+ },
+ "SW10": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -9.29,
+   -2.3,
+   -0.7,
+   4.3
+  ]
+ },
+ "SW11": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   0.7,
+   -2.3,
+   9.3,
+   4.3
+  ]
+ },
+ "SW12": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   10.7,
+   -2.3,
+   19.3,
+   4.3
+  ]
+ },
+ "SW13": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -19.3,
+   -12.3,
+   -10.71,
+   -5.7
+  ]
+ },
+ "SW14": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -9.29,
+   -12.3,
+   -0.7,
+   -5.7
+  ]
+ },
+ "SW15": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   0.7,
+   -12.3,
+   9.3,
+   -5.7
+  ]
+ },
+ "SW16": {
+  "fp": "SW_Push_1TS009xxxx-xxxx-xxxx_6x6x5mm",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   10.7,
+   -12.3,
+   19.3,
+   -5.7
+  ]
+ },
+ "U1": {
+  "fp": "SOT-23-3",
+  "duoi": false,
+  "goc": 270,
+  "khung": [
+   -5.55,
+   -22.14,
+   -2.06,
+   -17.95
+  ]
+ },
+ "C1": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   -1.05,
+   -22.0,
+   0.5,
+   -18.95
+  ]
+ },
+ "C2": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -5.55,
+   -17.0,
+   -2.5,
+   -15.45
+  ]
+ },
+ "C3": {
+  "fp": "C_0603_1608Metric",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -1.55,
+   -17.0,
+   1.5,
+   -15.45
+  ]
+ }
+}

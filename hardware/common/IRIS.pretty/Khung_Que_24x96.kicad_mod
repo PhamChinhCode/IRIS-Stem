@@ -1,0 +1,197 @@
+(footprint "Khung_Que_24x96"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Khung bo cỡ Que, danh nghĩa 24 x 96 mm (đường cắt 23.5 x 95.5), lỗ gá Ø3.2 theo lưới 8 mm. Dùng cho: I9")
+	(tags "IRIS khung bo")
+	(property "Reference" "REF**"
+		(at 12 -49 0)
+		(layer "F.Fab")
+		(uuid "dd108bef-102c-447a-b3b8-c774219912cc")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "Khung_Que_24x96"
+		(at 12 -47 0)
+		(layer "F.Fab")
+		(uuid "0b054c4a-0913-43f4-8567-ce88c509eb18")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4ecd93ca-be87-45b3-a41f-752016fb40c1")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c87552c5-96bc-49d8-adc0-d3581f806a69")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr exclude_from_pos_files exclude_from_bom)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start 0.25 -93.75)
+		(end 0.25 -2.25)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "cae711fb-dd41-4123-97c8-9bd001b71c3b")
+	)
+	(fp_line
+		(start 2.25 -0.25)
+		(end 21.75 -0.25)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "0201091e-146a-4785-bed7-e2d4a4386b07")
+	)
+	(fp_line
+		(start 21.75 -95.75)
+		(end 2.25 -95.75)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "e5e0b234-6a9f-4229-b817-e01aed721b4f")
+	)
+	(fp_line
+		(start 23.75 -2.25)
+		(end 23.75 -93.75)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "9af9e86b-d055-48d5-98cf-3df1fc3e1105")
+	)
+	(fp_arc
+		(start 0.25 -93.75)
+		(mid 0.8358 -95.1642)
+		(end 2.25 -95.75)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "90add966-b285-4752-a4d7-4152249784e4")
+	)
+	(fp_arc
+		(start 2.25 -0.25)
+		(mid 0.8358 -0.8358)
+		(end 0.25 -2.25)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "ef1ba703-7342-415a-9d81-5bf16f9dcca2")
+	)
+	(fp_arc
+		(start 21.75 -95.75)
+		(mid 23.164199 -95.164199)
+		(end 23.75 -93.75)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "d1cfd4ce-1049-4b65-9998-aa16e5087807")
+	)
+	(fp_arc
+		(start 23.75 -2.25)
+		(mid 23.164199 -0.835801)
+		(end 21.75 -0.25)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "Edge.Cuts")
+		(uuid "ee523499-c2d5-4f65-9e0a-86eb3b553587")
+	)
+	(fp_circle
+		(center 4 -92)
+		(end 6.75 -92)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "B.CrtYd")
+		(uuid "57a3e489-0f02-469f-95c3-6b583cbc917b")
+	)
+	(fp_circle
+		(center 20 -92)
+		(end 22.75 -92)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "B.CrtYd")
+		(uuid "4bd3954d-e061-496e-a63b-397894add2b5")
+	)
+	(fp_circle
+		(center 4 -92)
+		(end 6.75 -92)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "afb7b050-9ada-45d7-939a-187475ca3caa")
+	)
+	(fp_circle
+		(center 20 -92)
+		(end 22.75 -92)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "d3fd0c57-4d84-41da-b96c-88672699cc83")
+	)
+	(pad "" np_thru_hole circle
+		(at 4 -92)
+		(size 3.2 3.2)
+		(drill 3.2)
+		(layers "*.Cu" "*.Mask")
+		(uuid "da790d48-6699-4c05-8a66-ff85951f145a")
+	)
+	(pad "" np_thru_hole circle
+		(at 20 -92)
+		(size 3.2 3.2)
+		(drill 3.2)
+		(layers "*.Cu" "*.Mask")
+		(uuid "dfdd7f8c-b54d-4c11-bf6c-36f26f069607")
+	)
+	(embedded_fonts no)
+)

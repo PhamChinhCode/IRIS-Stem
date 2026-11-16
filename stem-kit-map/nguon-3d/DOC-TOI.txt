@@ -1,0 +1,2 @@
+Thả tệp 3D đã chỉnh sửa (.step, .stp, .stl) vào đây rồi chạy: python update_3d.py
+Cách đặt tên tệp: xem ../HUONG-DAN.md, bước 2.

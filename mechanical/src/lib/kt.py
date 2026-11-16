@@ -24,12 +24,13 @@ MONG_SAU = [-72.0, 0.0, 72.0]            # vị trí mộng tường sau (theo X
 MONG_BEN = [-40.0, 40.0]                 # mộng tường bên (theo Y)
 MONG_TRUOC = [-56.0, 32.0]               # mộng vách trước (toạ độ vách)
 
-# Cánh tay robot
+# Cánh tay robot (servo MG90S, số đo ở lib/mua_san.py)
 TAY_VAI_Z = 25.0        # cao độ trục vai so với đáy mâm xoay
-TAY_VAI_Y = 8.1         # mặt cần servo vai
+TAY_VAI_Y = 8.0         # mặt cần servo vai
 TAY_L1, TAY_L2 = 80.0, 64.0
-SG_VACH = 15.1          # mặt cần servo tới mặt tì tai servo
-SG_O = (-16.85, 6.15, 6.3)   # ô lắp thân servo: x min, x max, nửa cao (so với trục)
+MG_O = (-16.85, 6.25, 6.2)   # ô lắp thân MG90S: x min, x max, nửa cao (so với trục), hở 0,2–0,25 mỗi phía
+MG_KHE = 3.0            # khe vít tai dài 3 mm: nhận khoảng cách lỗ từ 27,2 đến 29,6 mm
+TD_L, TD_W = 38.0, 32.0 # đế cánh tay
 
 # Băng tải
 BT_TRUC_Z = 22.0        # cao độ trục con lăn so với mặt bảng gá

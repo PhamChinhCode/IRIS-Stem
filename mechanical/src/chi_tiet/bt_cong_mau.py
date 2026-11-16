@@ -13,7 +13,7 @@ def bt_cong_mau():
         for x in (-4.0, 4.0):
             s -= tru(D_M3, T_TAM + 2, x, sy * 36.0, -1)
     for x in (-8.0, 8.0):
-        for y in (-12.0, 12.0):
+        for y in (-12.0, 4.0):      # lỗ gá cỡ S, bo úp xuống
             s -= tru(D_M3, T_TAM + 2, x, y, 65.0)
     return to(s, "bt_cong_mau", "in3d2")
 

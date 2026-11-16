@@ -39,6 +39,8 @@ Kết quả: `../STEP/` (xem và lắp ráp), `../STL/` (in 3D). Ảnh xem nhanh
 | `lib/mua_san.py` | Linh kiện mua sẵn: servo, N20, JGA25, bánh, mắt trâu, quạt, bơm |
 | `lib/xe.py` | Khung xe K2 dùng chung cho xe dò line và xe cân bằng |
 | `chi_tiet/` | 28 chi tiết in 3D / cắt laser, mỗi tệp một chi tiết → `STEP/chi_tiet/`, `STL/` |
+| `lib/vo.py`, `vo/` | Vỏ bo mang: 19 đế + 17 nắp, mỗi tệp một chi tiết (sinh bằng `tao_tep_vo.py`) → `STEP/vo/`, `STL/vo/` |
+| `mach/vo_module.py` | Mọi bo mang kèm vỏ bày trên một mặt phẳng → `STEP/mach/vo_module.step` |
 | `mach/bo_module.py` | Toàn bộ bo mạch bày trên một mặt phẳng → `STEP/mach/bo_module.step` |
 | `du_an/` | 7 cụm lắp dự án → `STEP/du_an/` |
 
@@ -56,10 +58,14 @@ Kết quả: `../STEP/` (xem và lắp ráp), `../STL/` (in 3D). Ảnh xem nhanh
 
 ## Đưa mô hình vào bản đồ kit
 
-Sau khi dựng lại các cụm dự án, chạy từ thư mục `mechanical`:
+Sau khi dựng lại các cụm dự án, xuất mô hình từng module rồi cập nhật trang:
 
 ```bash
-PYTHONUTF8=1 python xuat_web.py
+python xuat_module.py
 ```
 
-Lệnh này ghi `docs/mo-hinh-3d.js` (lưới tam giác gọn của 7 cụm dự án). Trang [docs/ban-do-kit-stem.html](../../docs/ban-do-kit-stem.html) nạp tệp đó để hiện mô hình CAD trong khung 3D; hai tệp phải nằm cùng thư mục.
+```bash
+cd ../../stem-kit-map && python update_3d.py
+```
+
+Chi tiết, kể cả cách đưa tệp STEP/STL tự chỉnh sửa vào trang: [stem-kit-map/HUONG-DAN.md](../../stem-kit-map/HUONG-DAN.md).

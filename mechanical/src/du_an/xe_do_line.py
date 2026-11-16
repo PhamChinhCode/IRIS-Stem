@@ -25,7 +25,7 @@ def xe_do_line():
     p += [tru_do(12.0, x, y, -12.0) for (x, y) in lo_s2]
     p.append(bd.Pos(68.0, 0, -13.6) * bd.Rot(0, 0, 90) * module("S2"))
     # tầng trên: OLED, thu hồng ngoại, servo quay cảm biến siêu âm
-    p += tren.gan(*cum_gan("O3"), 8.0, -24.0, ten="O3")
+    p += tren.gan(*cum_gan("O3"), 16.0, -24.0, ten="O3")
     p += tren.gan(*cum_gan("I12"), 12.0, 24.0, ten="I12")
     dau = [ga_sieu_am(), khung((13.0, 0, 13.5), (0, 1, 0), (1, 0, 0)) * module("I11")]
     servo = [ga_servo()] + dat(bd.Pos(0, 0, T_TAM), sg90()) \

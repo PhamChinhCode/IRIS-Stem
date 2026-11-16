@@ -10,6 +10,16 @@ SG_TAI_LO = 27.8                         # khoảng cách 2 lỗ tai
 SG_TRUC_X = 5.35                         # trục ra lệch tâm thân
 SG_DINH = 31.0                           # mặt trên cần servo so với đáy thân
 
+# Servo MG90S: số đo lấy từ mô hình STEP/mua_san/adafruit_1143_micro_servo_high_torque_metal_gear.step
+# (step.parts, Adafruit 1143 = MG90S). Khác SG90 ở cao độ tai và khoảng cách lỗ tai.
+MG_STEP = "../STEP/mua_san/adafruit_1143_micro_servo_high_torque_metal_gear.step"
+MG_L, MG_W = 22.6, 12.0                  # thân
+MG_TAI_Z, MG_TAI_T, MG_TAI_L = 18.8, 2.0, 31.3   # cao độ đáy tai so với đáy thân, dày tai, dài cả hai tai
+MG_TRUC_X = 5.3                          # trục ra lệch tâm thân
+MG_LO = (-19.92, 9.68)                   # hai lỗ tai, tính từ trục, dọc chiều dài thân (cách nhau 29,6)
+MG_VACH = 12.4                           # mặt ngoài cần servo tới mặt dưới tai
+MG_DINH = MG_TAI_Z + MG_VACH             # mặt ngoài cần servo so với đáy thân
+
 # Động cơ N20 có encoder
 N20_HOP, N20_THAN, N20_ENC, N20_TRUC = 9.0, 15.0, 8.0, 10.0
 N20_W, N20_H = 12.0, 10.0
@@ -34,6 +44,23 @@ def sg90(goc=0.0):
 def sg90_truc(goc=0.0):
     """Servo với gốc đặt tại tâm trục, mặt ngoài cần servo ở z = 0, thân nằm phía -Z."""
     return [bd.Pos(-SG_TRUC_X, 0, -SG_DINH) * p for p in sg90(goc)]
+
+
+def mg90s(goc=0.0):
+    """Servo MG90S đứng (mô hình thật): tâm đáy thân ở gốc, trục ra hướng +Z tại x = MG_TRUC_X."""
+    import os
+
+    from cadgen import read_step
+    m = read_step(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", MG_STEP))
+    than = bd.Pos(MG_TRUC_X, 0, MG_TAI_Z) * bd.Rot(0, 0, 90) * m
+    can = tru(7.0, 4.0, z=-2.5) + hop(16.0, 5.0, 1.5, x=8.0) - tru(5.2, 3.6, z=-2.6)     # lỗ lồng trục răng
+    can = bd.Pos(MG_TRUC_X, 0, MG_DINH - 1.5) * bd.Rot(0, 0, goc) * can
+    return [to(than, "servo_MG90S", "xam"), to(can, "can_servo", "trang")]
+
+
+def mg90s_truc(goc=0.0):
+    """MG90S với gốc đặt tại tâm trục, mặt ngoài cần servo ở z = 0, thân nằm phía -Z."""
+    return [bd.Pos(-MG_TRUC_X, 0, -MG_DINH) * p for p in mg90s(goc)]
 
 
 def n20():

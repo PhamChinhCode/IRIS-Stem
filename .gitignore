@@ -21,6 +21,7 @@ Release/
 .pio/
 
 # Hệ điều hành, trình soạn thảo
+.history/
 Thumbs.db
 desktop.ini
 .DS_Store

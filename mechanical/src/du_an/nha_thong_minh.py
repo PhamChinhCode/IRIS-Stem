@@ -47,13 +47,13 @@ def nha_thong_minh():
     p = [t.part for t in (san, sau, trai, phai, truoc, mai)]
 
     # sàn: bo chủ, bếp có cảm biến gas, bàn phím, servo cửa
-    p += san.gan(*cum_gan("C1"), 0, 24, ten="C1")
+    p += san.gan(*cum_gan("C1"), 0, 32, ten="C1")
     p += san.gan(*cum_gan("I8"), 88, -32, ten="I8")
     p += san.gan(*cum_gan("I4"), 40, -40, ten="I4")
     p += san.gan(_servo(), GS_LO, -96, -56, rz=-90, ten="servo cửa")
     p.append(bd.Pos(-96, -56 - SG_TRUC_X, z0 + T_TAM + SG_DINH) * bd.Rot(0, 0, GOC_CUA) * nha_canh_cua())
     # tường sau (mặt trong): màn hình, đèn, PIR, nhiệt ẩm, relay
-    for ma, (u, v) in {"O3": (4, 0), "O1": (0, 40), "I7": (-48, 32), "I6": (56, 0), "O4": (-84, -16)}.items():
+    for ma, (u, v) in {"O3": (4, -8), "O1": (0, 40), "I7": (-48, 32), "I6": (56, 0), "O4": (-84, -16)}.items():
         p += sau.gan(*cum_gan(ma), u, v, ten=ma)
     # tường phải: quạt hút ở mặt trong, MOSFET bên cạnh; giàn phơi ở mặt ngoài
     p += phai.gan(quat_4010(), QUAT_LO, -4, -8, ten="quạt")

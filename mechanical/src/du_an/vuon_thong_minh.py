@@ -11,7 +11,7 @@ from lib.kt import BG_L, BG_W
 from lib.mach import cum_gan, module
 from lib.mua_san import bom_mini
 
-MACH = {"C1": (-32, 32), "O3": (40, 40), "I6": (68, 48), "O4": (-64, -40), "O5": (-28, -48)}
+MACH = {"C1": (-32, 32), "O3": (40, 40), "I6": (68, -8), "O4": (-64, -40), "O5": (-28, -48)}
 KHAY_LO = [(sx * 40.0, sy * 24.0) for sx in (-1, 1) for sy in (-1, 1)]
 BINH_LO = [(sx * 20.0, sy * 20.0) for sx in (-1, 1) for sy in (-1, 1)]
 

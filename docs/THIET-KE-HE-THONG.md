@@ -3,7 +3,7 @@
 Phiên bản 0.2 – 14/11/2026 (bản thiết kế mức hệ thống, chưa có sơ đồ mạch)
 
 Mô hình trực quan (dự án, sơ đồ nối, mô hình 3D):
-- Tệp trong thư mục này: [ban-do-kit-stem.html](ban-do-kit-stem.html), mở bằng trình duyệt.
+- Trang web: [stem-kit-map/index.html](../stem-kit-map/index.html), mở bằng trình duyệt. Cách cập nhật mô hình 3D: [HUONG-DAN.md](../stem-kit-map/HUONG-DAN.md).
 - Bản trực tuyến: https://claude.ai/artifact/GxmSu1H3DpPqMNoMUkfT9W
 
 ## 1. Phạm vi và các quyết định đã chốt
@@ -463,8 +463,9 @@ git clone https://bitbucket.org/john_maloney/smallvm.git microblocks
 
 | Thư mục | Nội dung |
 |---|---|
-| `docs/` | Tài liệu thiết kế này, bản đồ kit, chuẩn cổng, bản đồ địa chỉ I2C |
-| `hardware/` | Thiết kế mạch KiCad: `C1-bo-chu`, `C2-nguon-pin`, `S1-driver-dong-co`, `S2-do-line`, `S3-imu`, `bo-mang` (bo mang cho module đơn giản), `common` (thư viện ký hiệu, chân linh kiện, đầu cắm dùng chung) |
+| `docs/` | Tài liệu thiết kế này, chuẩn cổng, bản đồ địa chỉ I2C |
+| `stem-kit-map/` | Trang web bản đồ kit và lệnh `update_3d.py` cập nhật mô hình 3D |
+| `hardware/` | Thiết kế mạch KiCad: `C1-bo-chu`, `C2-nguon-pin`, `O7-servo-16-kenh`, `S1-driver-dong-co`, `S2-do-line`, `S3-imu`, `bo-mang` (bo mang cho module đơn giản), `common` (thư viện ký hiệu, chân linh kiện, đầu cắm dùng chung) |
 | `firmware/` | Firmware STM32G030 cho `S1`, `S2`, `S3`; `common` chứa khung I2C và bootloader dùng chung |
 | `libraries/` | Thư viện khối MicroBlocks tự viết (Động cơ, Dò line, Góc nghiêng, PID, IoT, Thiết bị nhà, Nguồn) |
 | `mechanical/` | Thiết kế cơ khí K1–K4 |

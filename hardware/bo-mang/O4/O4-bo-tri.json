@@ -1,0 +1,134 @@
+{
+ "J1": {
+  "fp": "Cong_PH_4P_Ngang",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -5.5,
+   -23.95,
+   5.49,
+   -15.25
+  ]
+ },
+ "K1": {
+  "fp": "Relay_SPDT_SANYOU_SRD_Series_Form_C",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   -8.0,
+   -9.09,
+   8.0,
+   11.09
+  ]
+ },
+ "J2": {
+  "fp": "TerminalBlock_Phoenix_MKDS-1,5-3-5.08_1x03_P5.08mm_Horizontal",
+  "duoi": false,
+  "goc": 180,
+  "khung": [
+   -8.17,
+   12.75,
+   8.17,
+   23.65
+  ]
+ },
+ "Q1": {
+  "fp": "SOT-23",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   4.45,
+   -13.9,
+   7.94,
+   -9.95
+  ]
+ },
+ "D1": {
+  "fp": "D_SOD-123",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   -1.05,
+   -12.34,
+   3.74,
+   -9.95
+  ]
+ },
+ "LED1": {
+  "fp": "LED_0603_1608Metric",
+  "duoi": false,
+  "goc": 0,
+  "khung": [
+   8.95,
+   -12.0,
+   12.0,
+   -10.45
+  ]
+ },
+ "R1": {
+  "fp": "R_0603_1608Metric",
+  "duoi": false,
+  "goc": 270,
+  "khung": [
+   6.45,
+   -19.5,
+   8.0,
+   -16.45
+  ]
+ },
+ "U1": {
+  "fp": "SMDIP-4_W9.53mm",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   8.95,
+   -9.58,
+   14.62,
+   2.55
+  ]
+ },
+ "R2": {
+  "fp": "R_0603_1608Metric",
+  "duoi": false,
+  "goc": 270,
+  "khung": [
+   12.95,
+   -13.5,
+   14.5,
+   -10.45
+  ]
+ },
+ "R3": {
+  "fp": "R_0603_1608Metric",
+  "duoi": false,
+  "goc": 180,
+  "khung": [
+   11.45,
+   -16.0,
+   14.5,
+   -14.45
+  ]
+ },
+ "R4": {
+  "fp": "R_0603_1608Metric",
+  "duoi": false,
+  "goc": 90,
+  "khung": [
+   8.95,
+   -16.0,
+   10.5,
+   -12.95
+  ]
+ },
+ "C1": {
+  "fp": "C_0805_2012Metric",
+  "duoi": false,
+  "goc": 270,
+  "khung": [
+   -4.05,
+   -13.94,
+   -2.0,
+   -10.45
+  ]
+ }
+}

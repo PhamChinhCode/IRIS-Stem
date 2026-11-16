@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "IRIS") (type "KiCad") (uri "${KIPRJMOD}/../common/IRIS.kicad_sym") (options "") (descr "Thư viện chung IRIS-Stem"))
+)
