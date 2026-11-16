@@ -5,6 +5,7 @@ Phiên bản 0.1 – 15/11/2026. Tài liệu này là đầu vào để vẽ sơ
 Nguồn tham khảo:
 - Yêu cầu hệ thống: [THIET-KE-HE-THONG.md](../docs/THIET-KE-HE-THONG.md); kích thước bo: [THIET-KE-CO-KHI.md](../docs/THIET-KE-CO-KHI.md).
 - Thư viện đầu cắm và khung bo: [common/README.md](common/README.md).
+- Tài liệu chi tiết từng bo, viết theo sơ đồ đã vẽ (ký hiệu linh kiện, gán chân, bố trí, kiểm thử): [C1](C1-bo-chu/THIET-KE-C1.md), [C2](C2-nguon-pin/THIET-KE-C2.md), [S1](S1-driver-dong-co/THIET-KE-S1.md), [S2](S2-do-line/THIET-KE-S2.md), [S3](S3-imu/THIET-KE-S3.md). Ký hiệu linh kiện trong các mục 2–7 dưới đây là bản nháp trước khi vẽ; khi lệch nhau thì lấy theo tài liệu từng bo.
 - Bo mẫu `PID-G4-Master-Control` (dự án driverDC): lấy linh kiện, cách chia khối và quy tắc trong `KICAD_DESIGN_GUIDE.md`.
 
 Ký hiệu trong các bảng linh kiện: cột LCSC chỉ ghi mã **đã đối chiếu** trên lcsc.com/jlcpcb.com ngày 15/11/2026; dấu “–” nghĩa là chưa tra, sẽ điền khi vẽ sơ đồ.

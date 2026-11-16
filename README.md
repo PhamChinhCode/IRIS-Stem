@@ -9,6 +9,7 @@ Hệ thống module tái sử dụng để dạy nhà thông minh, robot và IoT
 | Kit gồm những gì, 25 dự án dùng module nào | [docs/THIET-KE-HE-THONG.md](docs/THIET-KE-HE-THONG.md) |
 | Xem trực quan: dự án, sơ đồ nối dây, mô hình 3D, sơ đồ mạch | [stem-kit-map/index.html](stem-kit-map/index.html) |
 | Sơ đồ nguyên lý, linh kiện, mạch in của từng bo | [hardware/THIET-KE-MACH.md](hardware/THIET-KE-MACH.md) |
+| Chi tiết một bo tự thiết kế: gán chân, linh kiện, bố trí, kiểm thử | `hardware/<bo>/THIET-KE-<mã>.md`, ví dụ [THIET-KE-C1.md](hardware/C1-bo-chu/THIET-KE-C1.md) (có cho C1, C2, S1, S2, S3) |
 | Kích thước bo, chi tiết in 3D, vỏ hộp, mô hình lắp ráp | [docs/THIET-KE-CO-KHI.md](docs/THIET-KE-CO-KHI.md) |
 | Cách đưa tệp 3D, hình mạch, PDF lên trang web | [stem-kit-map/HUONG-DAN.md](stem-kit-map/HUONG-DAN.md) |
 
