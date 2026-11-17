@@ -1,4 +1,4 @@
-"""Chuyển tệp 3D (STEP, STL) thành dữ liệu cho trang stem-kit-map/index.html, và xuất hình sơ đồ, PCB từ KiCad.
+"""Chuyển tệp 3D (STEP, STL) thành dữ liệu cho trang stem-kit-map (index.html, ban-do.js), và xuất hình sơ đồ, PCB từ KiCad.
 
 Chạy trong thư mục stem-kit-map:
     python update_3d.py              chỉ chuyển các tệp mới hoặc vừa sửa
