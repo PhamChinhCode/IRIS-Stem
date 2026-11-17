@@ -1,12 +1,15 @@
 # Bản đồ kit STEM – hướng dẫn cập nhật mô hình 3D
 
-Trang [index.html](index.html) hiện 25 dự án và 26 module của bộ kit: sơ đồ nối, mô hình 3D, sơ đồ nguyên lý và mạch in. Mở trang bằng cách bấm đúp `index.html`; không cần máy chủ, nhưng máy phải có mạng để tải thư viện vẽ 3D (three.js) và phông chữ.
+Trang [index.html](index.html) hiện 25 dự án và 26 module của bộ kit: sơ đồ nối, mô hình 3D, sơ đồ nguyên lý và mạch in. Giao diện theo phong cách web IRIS Lab, và cũng chính các tệp này được nhúng vào trang IRIS STEM của web IRIS Lab. Mở trang bằng cách bấm đúp `index.html`; không cần máy chủ. Thư viện vẽ 3D (three.js r187) nằm sẵn trong `vendor/`; chỉ phông chữ cần mạng (không có mạng thì trang dùng phông hệ thống).
 
 ## Trong thư mục này có gì
 
 | Mục | Nội dung | Ai sửa |
 |---|---|---|
-| `index.html` | Trang web. Dữ liệu dự án và module nằm trong phần `<script>` của tệp | sửa tay khi đổi nội dung |
+| `index.html` | Khung trang độc lập (đầu trang, tiêu đề) | ít khi sửa |
+| `du-lieu.js` | Dữ liệu kit: module, cấp độ, dự án và cách nối | sửa tay khi đổi nội dung |
+| `ban-do.js`, `ban-do.css` | Giao diện bản đồ và khung 3D; mọi quy tắc CSS nằm trong `.kit-map` để nhúng được vào web khác | sửa khi đổi giao diện |
+| `vendor/` | three.js r187 đóng gói giống web IRIS Lab (`tools/three-build/` trong repo IRIS-LAB) | không sửa tay |
 | `nguon-3d/` | Tệp 3D bạn tự chỉnh sửa rồi thả vào (`.step`, `.stp`, `.stl`) | **bạn** |
 | `update_3d.py` | Chuyển tệp 3D thành dữ liệu cho trang, xuất hình sơ đồ và PCB từ KiCad, chép tài liệu PDF | chạy, không cần sửa |
 | `mo-hinh/` | Dữ liệu 3D của trang, mỗi mô hình một tệp `.js` | máy sinh, đừng sửa tay |
@@ -185,4 +188,8 @@ Trong KiCad: mở sơ đồ, chọn `File → Plot`, định dạng PDF, lưu v�
 
 ## Đưa trang lên mạng
 
-Chép cả thư mục `stem-kit-map` (trừ `nguon-3d/` và `update_3d.py` nếu muốn gọn) lên máy chủ tĩnh bất kỳ. Trang chỉ cần `index.html`, `mo-hinh/`, `hinh/` và `tai-lieu/`.
+Chép cả thư mục `stem-kit-map` (trừ `nguon-3d/` và `update_3d.py` nếu muốn gọn) lên máy chủ tĩnh bất kỳ. Trang chỉ cần `index.html`, `du-lieu.js`, `ban-do.js`, `ban-do.css`, `vendor/`, `mo-hinh/`, `hinh/` và `tai-lieu/`.
+
+Nhúng vào trang khác: thêm `<div id="kit-map" class="kit-map"></div>`, nạp `ban-do.css`, three.js, `du-lieu.js`, `ban-do.js` theo thứ tự đó. Nếu `mo-hinh/`, `hinh/`, `tai-lieu/` không nằm cùng thư mục với trang, đặt `window.KIT_GOC = 'đường/dẫn/';` trước khi nạp `ban-do.js`. Web IRIS Lab làm đúng như vậy (`iris-stem-ban-do.html`, dữ liệu đồng bộ bằng `tools/stem/sync_stem_map.sh`).
+
+Link sâu: `index.html#du-an-11` mở thẳng dự án 11, `#module-I1` mở module I1, `#bang-tong-hop` mở bảng tổng hợp.
