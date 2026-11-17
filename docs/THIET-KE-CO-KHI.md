@@ -60,7 +60,7 @@ Module cỡ S, M, L có một đầu JST PH nằm ngang ở giữa cạnh ngắn
 |---|---|
 | Lỗ gá | (4, 4), (60, 4), (4, 44), (60, 44) |
 | 5 cổng D/A (A1, A2, A3, D1, D2) | cạnh dưới, tâm x = 12 / 22 / 32 / 42 / 52 (bước 10) |
-| 4 cổng I2C | cạnh trên, tâm x = 12 / 22 / 32 / 42 |
+| 4 cổng I2C (I2C1-A, I2C1-B, I2C2-A, I2C2-B) | cạnh trên, tâm x = 12 / 22 / 32 / 42 |
 | Cổng D/A thứ sáu (D3) | cạnh trên, tâm x = 52 |
 | Cổng SPI 6 chân | cạnh trái, tâm y = 14,75 |
 | USB-C | cạnh trái, tâm y = 32 |
@@ -70,7 +70,7 @@ Module cỡ S, M, L có một đầu JST PH nằm ngang ở giữa cạnh ngắn
 | Nút A, nút B | (14, 15), (24, 15) |
 | Còi | (32,5; 13,5) |
 | LED RGB | (19, 25) |
-| Hàng rào servo 4 × 3 chân | tâm (26; 35,5), chiếm 10,2 × 7,6 |
+| Hàng rào servo 2 × 3 chân | tâm (26; 35,5), chiếm 5,1 × 7,6 |
 
 Lý do bố trí: bo thu từ 96 × 64 xuống 64 × 48 nên giữa hai lỗ gá của mỗi cạnh dài chỉ còn 50 mm, vừa đủ 5 đầu PH 4 chân đặt sát nhau (bước 10 mm, hở 0,1 mm). Vì vậy cổng D/A thứ sáu lên cạnh trên cạnh 4 cổng I2C, cổng SPI sang cạnh trái, còn cổng nguồn 5 V đổi sang loại cắm đứng đặt trong lòng bo (cạnh trái không đủ chỗ cho cả SPI, USB-C và cổng nguồn khi tính cả vỏ đầu cáp USB rộng khoảng 12 mm). Anten vẫn hướng ra mép phải, xa pin và động cơ.
 

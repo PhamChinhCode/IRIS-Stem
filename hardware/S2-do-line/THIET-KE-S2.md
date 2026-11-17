@@ -16,7 +16,7 @@ S2 đọc 8 mắt phản xạ hồng ngoại, tự hiệu chuẩn đen/trắng v
 | Cảm biến | 8 × ITR8307 (LED hồng ngoại + phototransistor), **mặt dưới bo**, bước 9 mm, bề ngang đọc 63 mm |
 | Nguồn | 5 V của cổng I2C; 3,3 V tại chỗ cho vi điều khiển và tải phototransistor |
 | Dòng tiêu thụ | khoảng 10 mA khi LED tắt; 100 mA trong lúc phát xung; trung bình khoảng 30 mA ở xung 20 % |
-| Giao tiếp | I2C tớ, 3,3 V, địa chỉ cố định 0x34; 2 cổng để nối chuỗi |
+| Giao tiếp | I2C tớ, 3,3 V, đến 400 kHz, địa chỉ cố định 0x34; 2 cổng để nối chuỗi. Thường nối chuỗi sau S1 trên bus **I2C2** của C1 |
 | Kích thước | 80 × 24 mm, 4 lỗ gá Ø3,2 tại (4, 4), (76, 4), (4, 20), (76, 20) |
 | Lắp | treo dưới mũi xe bằng 4 trụ M3 × 12, mặt mắt cách sàn 5,9 mm |
 

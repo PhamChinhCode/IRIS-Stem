@@ -16,7 +16,7 @@ S3 đọc cảm biến quán tính 6 trục, chạy bộ lọc ngay trên module
 | Cảm biến | LSM6DS3TR-C (gia tốc 3 trục + con quay 3 trục, LGA-14 2,5 × 3 mm) |
 | Nối cảm biến | SPI1, kèm ngắt dữ liệu sẵn sàng INT1 |
 | Nguồn | 5 V của cổng I2C → 3,3 V; khoảng 10 mA |
-| Giao tiếp | I2C tớ, 3,3 V, địa chỉ cố định 0x36; 2 cổng để nối chuỗi |
+| Giao tiếp | I2C tớ, 3,3 V, đến 400 kHz, địa chỉ cố định 0x36; 2 cổng để nối chuỗi. Cắm vào cổng **I2C2** (bus tốc độ cao) của C1 |
 | Kích thước | 32 × 32 mm, 4 lỗ gá Ø3,2 tại (4, 4), (28, 4), (4, 28), (28, 28) |
 
 ## 2. Sơ đồ khối

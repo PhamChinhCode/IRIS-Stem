@@ -174,7 +174,7 @@ tr:hover td, tr:hover th.mh{background:var(--sunk)}
 <script>
 const TYPES = {core:'Trung tâm', smart:'Module thông minh tự thiết kế', in:'Đầu vào', out:'Đầu ra', mech:'Cơ khí'};
 const M = {
-  C1:{n:'Bo chủ ESP32-S3', t:'core', port:'Máy tính qua USB-C hoặc Bluetooth', d:'Bộ não của kit, chạy chương trình MicroBlocks. Có sẵn 2 nút bấm, còi, LED RGB, WiFi và Bluetooth; 6 cổng D/A, bus I2C, cổng SPI và 4 cổng servo.'},
+  C1:{n:'Bo chủ ESP32-S3', t:'core', port:'Máy tính qua USB-C hoặc Bluetooth', d:'Bộ não của kit, chạy chương trình MicroBlocks. Có sẵn 2 nút bấm, còi, LED RGB, WiFi và Bluetooth; 6 cổng D/A, 2 bus I2C (thường và tốc độ cao), cổng SPI và 2 cổng servo.'},
   C2:{n:'Nguồn pin 2S', t:'core', port:'5 V vào bo chủ, 7,4 V sang module động lực, I2C để đọc pin', d:'Hai cell 18650 có mạch bảo vệ. Cấp 5 V cho bo chủ và 7,4 V cho động cơ; đo được phần trăm pin và dòng tiêu thụ.'},
   S1:{n:'Driver động cơ encoder', t:'smart', port:'I2C; nguồn 7,4 V từ C2; 2 cổng động cơ 6 chân', d:'Bo chủ chỉ gửi vận tốc hoặc vị trí mong muốn, module tự điều khiển 2 động cơ cho đúng. Học sinh không phải tự đọc encoder.'},
   S2:{n:'Dò line 8 mắt', t:'smart', port:'I2C, nối chuỗi', d:'Tám mắt đọc vạch, tự hiệu chuẩn đen trắng. Trả về vị trí vạch từ -100 đến 100 và báo ngã tư, mất vạch.'},

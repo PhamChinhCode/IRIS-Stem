@@ -16,7 +16,7 @@ S1 nhận lệnh qua I2C và tự điều khiển hai động cơ DC có encoder
 | Driver | TB6612FNG: 1,2 A liên tục, 3,2 A đỉnh mỗi kênh |
 | Nguồn động lực | `VM` 6–12 V từ C2 qua XT30 (giới hạn của TB6612: 4,5–13,5 V), có chống ngược cực |
 | Nguồn logic | 5 V của cổng I2C → 3,3 V; khoảng 40 mA |
-| Giao tiếp | I2C tớ, 3,3 V, địa chỉ 0x30–0x33 chọn bằng 2 cầu hàn; 2 cổng để nối chuỗi |
+| Giao tiếp | I2C tớ, 3,3 V, đến 400 kHz, địa chỉ 0x30–0x33 chọn bằng 2 cầu hàn; 2 cổng để nối chuỗi. Cắm vào cổng **I2C2** (bus tốc độ cao) của C1 |
 | Encoder | 2 kênh vuông pha, đếm bằng timer phần cứng; cấp 3,3 V |
 | Đo | điện áp `VM` (bước 8,9 mV) |
 | Kích thước | 48 × 48 mm, 4 lỗ gá Ø3,2 tại (4, 4), (44, 4), (4, 44), (44, 44) |

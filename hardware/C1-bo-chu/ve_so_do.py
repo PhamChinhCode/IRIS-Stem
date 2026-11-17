@@ -86,7 +86,7 @@ s.chia(u3, {"1": "USB_D+", "3": "USB_D-", "4": None, "6": None, "5": "VBUS", "2"
 
 # ================= 2. CẦU CHÌ VÀ 3V3 =================
 s.khoi(10, 94, 160, 150, "CẦU CHÌ TỰ PHỤC HỒI VÀ ỔN ÁP 3V3", [
-    "F1 1,5 A cho 4 cổng servo; F2 1,1 A cho các cổng D/A, I2C, SPI",
+    "F1 1,5 A cho 2 cổng servo; F2 1,1 A cho các cổng D/A, I2C, SPI",
     "U2: LDO 1 A vỏ SOT-223, sụt áp thấp (TLV1117LV33): 0,6 W khi ESP32 phát WiFi liên tục",
 ])
 for ref, gt, y, tu, tu_gt, dich in (("F1", "1,5A", 108, "C1", "220u/16V", "5V_SERVO"), ("F2", "1,1A", 128, "C2", "10u/25V", None)):
@@ -134,7 +134,7 @@ s.chia(u1, {
     "39": "A1_S1", "38": "A1_S2", "4": "A2_S1", "5": "A2_S2", "6": "A3_S1", "7": "A3_S2",
     "22": "D1_S1", "23": "D1_S2", "31": "D2_S1", "32": "D2_S2", "37": "D3_S1", "36": "D3_S2",
     "12": "SDA", "17": "SCL", "20": "SPI_SCK", "19": "SPI_MOSI", "21": "SPI_MISO", "18": "SPI_CS",
-    "8": "SERVO1", "9": "SERVO2", "10": "SERVO3", "11": "SERVO4",
+    "8": "SERVO1", "9": "SERVO2", "10": "SDA2", "11": "SCL2",
     "13": "USB_D-", "14": "USB_D+", "33": "BUZZER", "34": "BTN_A", "35": "BTN_B", "25": "RGB", "24": "IO47",
     "15": None, "26": None, "16": None, "28": None, "29": None, "30": None,
 })
@@ -203,8 +203,9 @@ s.nguon("GND", rgb.p("VSS"))
 tu_tach("C13", "100n", 292, 206)
 
 # ================= 5. CỔNG =================
-s.khoi(306, 14, 460, 92, "CỔNG RA: 6 D/A · 4 I2C · SPI · 4 SERVO", [
-    "Chân 1 = GND, chân 2 = 5 V ở mọi cổng.  D3 kiêm UART: S1 = TX (GPIO43), S2 = RX (GPIO44)",
+s.khoi(306, 14, 460, 92, "CỔNG RA: 6 D/A · 2 I2C1 + 2 I2C2 · SPI · 2 SERVO", [
+    "Chân 1 = GND, chân 2 = 5 V ở mọi cổng.  D3 kiêm UART 1: S1 = TX (GPIO43), S2 = RX (GPIO44).  D2 kiêm UART 2: S1 = TX (GPIO38), S2 = RX (GPIO39)",
+    "I2C1 (GPIO8/9, 100 kHz): module thường.  I2C2 (GPIO17/18, 400 kHz): module cần tốc độ cao (S1, S3)",
 ])
 
 
@@ -233,21 +234,22 @@ for i, t in enumerate(da):
     x, y = (cot[i], 32) if i < 5 else (cot[0], 54)
     cong("IRIS:Cong_DA", f"J{3 + i}", t, x, y, [("GND", "GND"), ("5V", "+5V"), ("S1", f"{t}_S1_J"), ("S2", f"{t}_S2_J")])
 for i in range(4):
-    cong("IRIS:Cong_I2C", f"J{9 + i}", f"I2C {i + 1}", cot[1 + i], 54,
-         [("GND", "GND"), ("5V", "+5V"), ("SDA", "SDA_J"), ("SCL", "SCL_J")])
+    b = "" if i < 2 else "2"
+    cong("IRIS:Cong_I2C", f"J{9 + i}", f"I2C{i // 2 + 1}-{'AB'[i % 2]}", cot[1 + i], 54,
+         [("GND", "GND"), ("5V", "+5V"), ("SDA", f"SDA{b}_J"), ("SCL", f"SCL{b}_J")])
 cong("IRIS:Cong_SPI", "J13", "SPI", cot[0], 78, [("GND", "GND"), ("5V", "+5V"), ("SCK", "SPI_SCK_J"),
                                                  ("MOSI", "SPI_MOSI_J"), ("MISO", "SPI_MISO_J"), ("CS", "SPI_CS_J")])
-for i in range(4):
+for i in range(2):
     cong("IRIS:Cong_Servo", f"J{14 + i}", f"SERVO {i + 1}", cot[1 + i], 78,
          [("GND", "GND"), ("5V", "G:5V_SERVO"), ("PWM", f"SERVO{i + 1}_J")])
 
 # ================= 6. ĐIỆN TRỞ NỐI TIẾP =================
 s.khoi(306, 96, 460, 172, "ĐIỆN TRỞ NỐI TIẾP VÀ KÉO LÊN I2C", [
     "Thứ tự bắt buộc: đầu cắm → điện trở → (SRV05-4, chân ESP32).  Lỗi đưa 5 V vào: (5 − 3,3 − 0,7) / 220 = 4,5 mA",
-    "Kéo lên I2C 2k2 đặt phía đầu cắm; chỉ bo chủ có điện trở kéo lên",
+    "Kéo lên 2k2 cho từng bus I2C, đặt phía đầu cắm; chỉ bo chủ có điện trở kéo lên",
 ])
-tin = [f"{t}_S{k}" for t in da for k in (1, 2)] + [f"SERVO{i}" for i in range(1, 5)]
-tin = [(t, "220R") for t in tin] + [(t, "100R") for t in ("SDA", "SCL", "SPI_SCK", "SPI_MOSI", "SPI_MISO", "SPI_CS")]
+tin = [f"{t}_S{k}" for t in da for k in (1, 2)] + [f"SERVO{i}" for i in range(1, 3)]
+tin = [(t, "220R") for t in tin] + [(t, "100R") for t in ("SDA", "SCL", "SDA2", "SCL2", "SPI_SCK", "SPI_MOSI", "SPI_MISO", "SPI_CS")]
 for i, (t, gt) in enumerate(tin):
     x0, y = 326 + 52 * (i // 8), 108 + 7 * (i % 8)
     s.nhan(t, (x0, y), "trai")
@@ -255,7 +257,7 @@ for i, (t, gt) in enumerate(tin):
     s.w((x0, y), tr)
     s.w(ph, (x0 + 8, y))
     s.ten_day(t + "_J", (x0 + 8, y))
-for ref, t, x in (("R20", "SDA_J", 434), ("R21", "SCL_J", 447)):
+for ref, t, x in (("R20", "SDA_J", 434), ("R21", "SCL_J", 447), ("R22", "SDA2_J", 404), ("R23", "SCL2_J", 418)):
     _, tr, d = s.R(ref, "2k2", x, 158)
     s.nguon("+3V3", tr)
     s.w(d, (x, 163))
@@ -277,11 +279,11 @@ for i in range(6):
 s.khoi(10, 154, 160, 226, "CƠ KHÍ VÀ GHI CHÚ", [])
 s.dat("IRIS:Khung_C1_64x48", "KH1", "Khung_C1_64x48", 30, 174, 0, vt_ref=(0, -6), vt_gt=(0, 6))
 for i, g in enumerate((
-    "Bo 96 × 64 mm, lỗ gá Ø3,2 theo lưới 8 mm (nằm trong chân linh kiện KH1).",
+    "Bo 64 × 48 mm, lỗ gá Ø3,2 theo lưới 8 mm (nằm trong chân linh kiện KH1).",
     "Mọi R, C nhỏ: 0603 1 % / 50 V; tụ 10 µF: 0805 25 V.",
     "Không đặt tụ lọc trên cổng A1–A3: còn dùng làm cổng số tốc độ cao.",
     "GPIO43 (D3-S1) phát thông báo khởi động của ROM mỗi lần reset.",
-    "I2C mặc định 100 kHz (2k2, bus 300 pF: thời gian lên 560 ns).",
+    "I2C1 100 kHz (2k2, bus 300 pF: lên 560 ns).  I2C2 400 kHz: bus tối đa 150 pF (lên 280 ns).",
     "Chân linh kiện của còi là tạm: chọn còi thụ động SMD rồi đổi cho khớp.",
     "Thiết kế: hardware/THIET-KE-MACH.md mục 6.",
 )):

@@ -32,7 +32,7 @@ Hệ quả của mô hình bán kit:
         │  ESP32-S3      │
         └┬─────┬─────┬──┬┘
          │     │     │  └── Cổng SPI (6 chân, khóa riêng) ── RFID
-         │     │     └───── Cổng Servo (3 chân) ×4 ───────── servo
+         │     │     └───── Cổng Servo (3 chân) ×2 ───────── servo
          │     └─────────── Cổng D/A (4 chân) ×6 ─────────── module đơn giản (D3 kiêm UART)
          └───────────────── Bus I2C (4 chân) ×4, nối chuỗi ─ module thông minh,
                                                               OLED, AHT20...
@@ -54,8 +54,8 @@ Mọi cổng trên bo chủ chỉ cấp **một nguồn 5 V**, còn **tín hiệ
 | Cổng | Số chân | Thứ tự chân | Màu | Số lượng trên bo chủ |
 |---|---|---|---|---|
 | D/A | 4 | GND, 5V, S1, S2 | trắng | 6 (3 analog + 3 số; cổng D3 kiêm UART) |
-| I2C | 4 | GND, 5V, SDA, SCL | xanh | 4 (chung một bus) |
-| Servo | 3 | GND, 5V, PWM | đen (hàng rào chuẩn servo) | 4 |
+| I2C | 4 | GND, 5V, SDA, SCL | xanh | 4, chia hai bus riêng: 2 cổng I2C1 (100 kHz, module thường) và 2 cổng I2C2 (400 kHz, module cần tốc độ cao như S1, S3) |
+| Servo | 3 | GND, 5V, PWM | đen (hàng rào chuẩn servo) | 2 |
 | SPI | 6 (khóa lệch so với cổng động cơ) | GND, 5V, SCK, MOSI, MISO, CS | vàng | 1 |
 | Động cơ (trên S1) | 6 | M+, M-, GND, 3V3, EncA, EncB | đỏ | 2 trên mỗi S1 |
 | Nguồn động lực | 2 (XT30) | GND, VBAT | – | C2 → S1 |
@@ -68,7 +68,8 @@ Quy tắc điện:
 - Cổng analog A1–A3 dùng được như cổng số, nên module số cắm được vào cả 6 cổng D/A.
 - Ngân sách dòng 5 V: cổng USB máy tính chỉ cấp khoảng 500 mA, không đủ cho MQ-2 + NeoPixel + servo cùng lúc. Dự án nhà thông minh và IoT dùng adapter 5 V/2 A trở lên; thư viện NeoPixel giới hạn sẵn độ sáng; cổng servo trên bo chủ chỉ dùng tối đa 2 servo nhỏ, nhiều hơn thì dùng O7.
 - An toàn điện: relay O4 chỉ đóng cắt tải điện áp thấp (đến 24 V). Tài liệu và nhãn trên module cấm nối điện lưới 220 V.
-- Cổng D3 kiêm UART (S1 = TX, S2 = RX), dùng chung chuẩn cổng D/A nên không thêm loại đầu cắm mới. Module UART chạy 5 V phải có phân áp trên đường TX của nó về chân RX của bo chủ.
+- Bo chủ có hai bus I2C tách rời. I2C1 chạy 100 kHz cho module thường (OLED, nhiệt ẩm, bàn phím, INA219, O7). I2C2 chạy 400 kHz cho module cần tốc độ cao (S1, S3, và S2 khi nối chuỗi sau S1). Đầu cắm hai bus giống nhau; cắm nhầm bus thì module không được tìm thấy chứ không hỏng. Địa chỉ I2C vẫn không trùng nhau trên cả hai bus.
+- Cổng D3 kiêm UART 1 và cổng D2 kiêm UART 2 (S1 = TX, S2 = RX), dùng chung chuẩn cổng D/A nên không thêm loại đầu cắm mới. Module UART chạy 5 V phải có phân áp trên đường TX của nó về chân RX của bo chủ.
 - Chân TX của cổng D3 phát thông báo khởi động của ESP32-S3 mỗi lần reset: không cắm relay hay còi vào cổng này; ưu tiên cho UART và cảm biến đầu vào.
 - Cổng SPI và cổng động cơ cùng 6 chân: phải dùng hai họ đầu cắm khác nhau (ví dụ SPI dùng PH2.0, động cơ dùng ZH1.5 hoặc XH2.54) để không cắm nhầm.
 
@@ -76,12 +77,13 @@ Quy tắc điện:
 
 | Chức năng | GPIO |
 |---|---|
-| I2C | SDA 8, SCL 9 |
+| I2C1 (100 kHz) | SDA 8, SCL 9 |
+| I2C2 (400 kHz) | SDA 17, SCL 18 |
 | Cổng analog A1, A2, A3 | (1, 2), (4, 5), (6, 7) – thuộc ADC1, đọc được khi bật WiFi |
-| Cổng số D1, D2 | (14, 21), (38, 39) |
+| Cổng số D1, D2 | (14, 21), (38, 39); D2 kiêm UART 2: TX 38, RX 39 |
 | Cổng D3 / UART | TX 43, RX 44 (tạm; chốt sau khi thử thư viện Serial của MicroBlocks) |
 | SPI | CS 10, MOSI 11, SCK 12, MISO 13 |
-| Servo 1–4 | 15, 16, 17, 18 |
+| Servo 1–2 | 15, 16 |
 | Trên bo: nút A, nút B, còi, LED RGB | 41, 42, 40, 48 |
 | Dự phòng | 47 |
 | Không dùng | 0, 3, 45, 46 (strapping); 19, 20 (USB); 35–37 (bộ nhớ của module N16R8) |
@@ -289,13 +291,14 @@ Dự án này dùng hết cả 6 cổng D/A. Cảnh báo dùng còi và LED RGB 
 
 **Xe dò line (dự án 14)**
 ```
-C2 ── 5 V ──► C1 ── I2C ──► S1 ──► S2 dò line ──► O3 OLED
+C2 ── 5 V ──► C1 ─┬─ I2C2 ──► S1 ──► S2 dò line
+                  └─ I2C1 ──► O3 OLED
 C2 ── 7,4 V ─────────────► S1 ══► 2 động cơ encoder (K1)
 ```
 
 **Xe cân bằng (dự án 21)**
 ```
-C2 ── 5 V ──► C1 ── I2C ──► S1 ──► S3 IMU
+C2 ── 5 V ──► C1 ── I2C2 ──► S1 ──► S3 IMU
 C2 ── 7,4 V ─────────────► S1 ══► 2 động cơ encoder (K1), khung K2 lắp đứng
 ```
 
@@ -339,7 +342,8 @@ Phụ thuộc giữa các gói:
 
 ## 9. Những điểm phải kiểm chứng bằng bản mẫu
 
-1. **Xe cân bằng trên MicroBlocks**: vòng đọc góc S3 → PID → gửi lệnh S1 cần đạt khoảng 100 Hz trở lên qua I2C. Chưa đo.
+1. **Xe cân bằng trên MicroBlocks**: vòng đọc góc S3 → PID → gửi lệnh S1 cần đạt khoảng 100 Hz trở lên qua bus I2C2 (400 kHz). Chưa đo.
+   Kèm theo: **MicroBlocks hiện chỉ có một bus I2C**; phải thêm bus thứ hai (GPIO17/18) vào bản fork thì các cổng I2C2 mới dùng được.
 2. **Firmware MicroBlocks trên ESP32-S3-WROOM-1 N16R8**: nạp firmware, kết nối USB/BLE, và chân I2C mặc định có đúng là 8/9 hay không.
 3. **RFID RC522 qua SPI** với thư viện có sẵn của MicroBlocks trên S3.
 4. **MQTT và HTTP có mã hóa**: nếu MicroBlocks không hỗ trợ TLS, các dự án IoT cần máy chủ MQTT nội bộ đặt trên máy giáo viên.

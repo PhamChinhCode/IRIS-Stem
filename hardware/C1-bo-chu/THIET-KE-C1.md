@@ -1,6 +1,6 @@
 # C1 – Bo chủ ESP32-S3: tài liệu thiết kế chi tiết
 
-Phiên bản 0.1 – 16/11/2026. Viết theo sơ đồ [C1.kicad_sch](C1.kicad_sch) (87 linh kiện, ERC 0 lỗi). **Chưa có mạch in, chưa có bản mẫu**: mọi con số dưới đây là tính toán, chưa đo.
+Phiên bản 0.2 – 16/11/2026 (bớt còn 2 cổng servo, thêm bus I2C thứ hai, D2 kiêm UART 2). Viết theo sơ đồ [C1.kicad_sch](C1.kicad_sch) (87 linh kiện, ERC 0 lỗi). **Chưa có mạch in, chưa có bản mẫu**: mọi con số dưới đây là tính toán, chưa đo.
 
 Tài liệu liên quan: kiến trúc chung và lý do chọn linh kiện ở [THIET-KE-MACH.md](../THIET-KE-MACH.md) mục 0, 1, 6; chuẩn cổng ở [THIET-KE-HE-THONG.md](../../docs/THIET-KE-HE-THONG.md) mục 3; kích thước và vị trí lắp ở [THIET-KE-CO-KHI.md](../../docs/THIET-KE-CO-KHI.md) mục 3.2.
 
@@ -15,10 +15,10 @@ C1 là bộ não của kit: chạy máy ảo MicroBlocks, nối máy tính qua U
 | Vi điều khiển | ESP32-S3-WROOM-1-N16R8 (16 MB flash, 8 MB PSRAM, anten trên bo) |
 | Kích thước | 64 × 48 mm, 4 lỗ gá Ø3,2 tại (4, 4), (60, 4), (4, 44), (60, 44) |
 | Nguồn vào | USB-C 5 V, hoặc 5,45 V từ C2 qua cổng XH 2 chân; tự chọn nguồn |
-| Nguồn ra cổng | `+5V` (sau cầu chì 1,1 A) cho 11 cổng; `5V_SERVO` (sau cầu chì 1,5 A) cho 4 cổng servo |
+| Nguồn ra cổng | `+5V` (sau cầu chì 1,1 A) cho 11 cổng; `5V_SERVO` (sau cầu chì 1,5 A) cho 2 cổng servo |
 | Nguồn logic | 3,3 V, ổn áp 1 A |
 | Mức tín hiệu | 3,3 V trên mọi cổng |
-| Cổng | 6 D/A (3 analog + 3 số, D3 kiêm UART), 4 I2C chung bus, 1 SPI, 4 servo |
+| Cổng | 6 D/A (3 analog + 3 số; D3 kiêm UART 1, D2 kiêm UART 2), 2 I2C1 (100 kHz) + 2 I2C2 (400 kHz), 1 SPI, 2 servo |
 | Trên bo | nút A, nút B, còi, LED RGB, nút RESET, nút BOOT, LED nguồn |
 | Bảo vệ | 2 cầu chì tự phục hồi, 7 IC chống tĩnh điện, điện trở nối tiếp trên 22 đường tín hiệu |
 
@@ -26,7 +26,7 @@ C1 là bộ não của kit: chạy máy ảo MicroBlocks, nối máy tính qua U
 
 ```
  J1 USB-C ─┬─ VBUS ─► Q1 AO3401A ──┐
-           │                       ├─► 5V_SYS ─┬─► F1 1,5 A ─► 5V_SERVO ─► J14–J17 (servo)
+           │                       ├─► 5V_SYS ─┬─► F1 1,5 A ─► 5V_SERVO ─► J14, J15 (servo)
  J2 XH 2 chân (từ C2) ─► D1 SS54 ──┘           ├─► F2 1,1 A ─► +5V ─► J3–J13 (D/A, I2C, SPI)
            │                                   └─► U2 TLV1117LV33 ─► +3V3 ─► U1, kéo lên, còi, LED RGB
            └─ D+/D− ─► U3 (ESD) ─► GPIO20/19 của U1
@@ -44,11 +44,15 @@ Chân 1 luôn là GND, chân 2 luôn là 5 V. Ký hiệu và chân linh kiện l
 | J1 | USB-C | HRO TYPE-C-31-M-12 | USB 2.0, CC1 và CC2 mỗi chân 5k1 xuống GND |
 | J2 | 5 V từ C2 | JST XH 2 chân | GND, 5V |
 | J3, J4, J5 | A1, A2, A3 | JST PH 4 chân | GND, 5V, S1, S2 |
-| J6, J7 | D1, D2 | JST PH 4 chân | GND, 5V, S1, S2 |
-| J8 | D3 / UART | JST PH 4 chân | GND, 5V, S1 = TX, S2 = RX |
-| J9–J12 | I2C 1–4 | JST PH 4 chân | GND, 5V, SDA, SCL |
+| J6 | D1 | JST PH 4 chân | GND, 5V, S1, S2 |
+| J7 | D2 / UART 2 | JST PH 4 chân | GND, 5V, S1 = TX, S2 = RX |
+| J8 | D3 / UART 1 | JST PH 4 chân | GND, 5V, S1 = TX, S2 = RX |
+| J9, J10 | I2C1-A, I2C1-B (bus thường, 100 kHz) | JST PH 4 chân | GND, 5V, SDA, SCL |
+| J11, J12 | I2C2-A, I2C2-B (bus tốc độ cao, 400 kHz) | JST PH 4 chân | GND, 5V, SDA, SCL |
 | J13 | SPI | JST PH 6 chân | GND, 5V, SCK, MOSI, MISO, CS |
-| J14–J17 | Servo 1–4 | hàng rào 3 chân 2,54 mm | GND, 5V, PWM |
+| J14, J15 | Servo 1, 2 | hàng rào 3 chân 2,54 mm | GND, 5V, PWM |
+
+Hai bus I2C dùng cùng loại đầu cắm. Cắm nhầm bus không làm hỏng gì, nhưng chương trình sẽ không tìm thấy module. Nhãn in trên bo phải phân biệt rõ hai nhóm cổng.
 
 ## 4. Gán chân ESP32-S3
 
@@ -60,10 +64,11 @@ Lấy từ danh sách lưới của sơ đồ. «Chân» là số chân trên mo
 | A2 S1 / S2 | `A2_S1`, `A2_S2` | 4, 5 | 4, 5 | R32, R33 | U4 |
 | A3 S1 / S2 | `A3_S1`, `A3_S2` | 6, 7 | 6, 7 | R34, R35 | U5 |
 | D1 S1 / S2 | `D1_S1`, `D1_S2` | 14, 21 | 22, 23 | R36, R37 | U5 |
-| D2 S1 / S2 | `D2_S1`, `D2_S2` | 38, 39 | 31, 32 | R38, R39 | U6 |
-| D3 S1 (TX) / S2 (RX) | `D3_S1`, `D3_S2` | 43, 44 | 37, 36 | R40, R41 | U6 |
-| Servo 1–4 | `SERVO1`…`SERVO4` | 15, 16, 17, 18 | 8, 9, 10, 11 | R42–R45 (220 Ω) | U7 |
-| I2C SDA / SCL | `SDA`, `SCL` | 8, 9 | 12, 17 | R46, R47 (100 Ω) | U8 |
+| D2 S1 (TX 2) / S2 (RX 2) | `D2_S1`, `D2_S2` | 38, 39 | 31, 32 | R38, R39 | U6 |
+| D3 S1 (TX 1) / S2 (RX 1) | `D3_S1`, `D3_S2` | 43, 44 | 37, 36 | R40, R41 | U6 |
+| Servo 1, 2 | `SERVO1`, `SERVO2` | 15, 16 | 8, 9 | R42, R43 (220 Ω) | U7 |
+| I2C1 SDA / SCL | `SDA`, `SCL` | 8, 9 | 12, 17 | R44, R45 (100 Ω) | U7 |
+| I2C2 SDA / SCL | `SDA2`, `SCL2` | 17, 18 | 10, 11 | R46, R47 (100 Ω) | U8 |
 | SPI SCK / MOSI | `SPI_SCK`, `SPI_MOSI` | 12, 11 | 20, 19 | R48, R49 (100 Ω) | U8 |
 | SPI MISO / CS | `SPI_MISO`, `SPI_CS` | 13, 10 | 21, 18 | R50, R51 (100 Ω) | U9 |
 | USB D− / D+ | `USB_D-`, `USB_D+` | 19, 20 | 13, 14 | không | U3 |
@@ -80,6 +85,8 @@ Ghi chú về chân:
 - A1–A3 (GPIO1–7) thuộc ADC1 nên đọc analog được khi bật WiFi. GPIO14 thuộc ADC2, không dùng làm analog.
 - GPIO0, 3, 45, 46 là chân strapping. GPIO0 chỉ nối nút BOOT; ba chân còn lại để hở.
 - GPIO35, 36, 37 nối bộ nhớ PSRAM bên trong module N16R8, không dùng được.
+- UART trên D2 và D3 là gán bằng phần mềm: ESP32-S3 đưa được UART ra bất kỳ GPIO nào, nên hai cổng này vẫn dùng như cổng D/A thường khi không cần UART.
+- GPIO17, 18 (I2C2) trước đây là servo 3 và 4.
 - GPIO43 (D3-S1) phát thông báo khởi động của ROM mỗi lần reset: không cắm relay hay còi vào cổng D3.
 
 ## 5. Mô tả từng khối
@@ -109,7 +116,7 @@ Tổn hao: Q1 khoảng 0,24 W ở 2 A. D1 0,6 W ở 1,5 A và 1,35 W ở 3 A, c�
 
 | Linh kiện | Giá trị | Vai trò |
 |---|---|---|
-| F1 + C1 | PTC 1,5 A giữ (1812) + 220 µF 16 V | `5V_SERVO` cho 4 cổng servo; tụ hoá đỡ dòng khởi động servo |
+| F1 + C1 | PTC 1,5 A giữ (1812) + 220 µF 16 V | `5V_SERVO` cho 2 cổng servo; tụ hoá đỡ dòng khởi động servo |
 | F2 + C2 | PTC 1,1 A giữ (1812) + 10 µF | `+5V` cho 6 cổng D/A, 4 cổng I2C, cổng SPI |
 | U2 | TLV1117LV33 (SOT-223, 1 A) | `5V_SYS` → `+3V3` |
 | C3; C4, C5 | 10 µF 25 V | tụ vào; hai tụ ra của U2 |
@@ -150,11 +157,13 @@ Còi cấp từ `+3V3` nên dòng của nó đi qua U2. Còi điện từ cỡ 1
 ### 5.5. Điện trở nối tiếp, kéo lên I2C và chống tĩnh điện
 
 - Mỗi đường tín hiệu đi theo thứ tự: đầu cắm → điện trở nối tiếp → (SRV05-4 và chân ESP32). Điện trở phải đứng **giữa** đầu cắm và IC chống tĩnh điện.
-- 220 Ω cho D/A và servo (R30–R45), 100 Ω cho I2C và SPI (R46–R51).
+- 220 Ω cho D/A và servo (R30–R43), 100 Ω cho hai bus I2C và SPI (R44–R51).
 - Nếu một module lỗi đưa 5 V lên chân tín hiệu, dòng qua diode kẹp là (5 − 3,3 − 0,7) / 220 = 4,5 mA, chảy vào lưới `+3V3` và được ESP32 tiêu thụ.
-- R20, R21 (2k2) kéo `SDA_J`, `SCL_J` lên `+3V3` ở **phía đầu cắm**. Đây là điện trở kéo lên duy nhất của cả bus; module không được có điện trở kéo lên.
-- Bus 300 pF (4–5 module và dây): thời gian lên 0,85 × 2k2 × 300 pF = 560 ns, đạt 100 kHz, không đạt 400 kHz. Chuỗi ngắn khoảng 100 pF (xe cân bằng) thì 190 ns, dùng được 400 kHz.
-- U4–U9 (6 × SRV05-4, VP = `+3V3`) bảo vệ 22 đường; U9 còn 2 kênh trống.
+- R20, R21 (2k2) kéo `SDA_J`, `SCL_J` của I2C1 lên `+3V3`; R22, R23 (2k2) kéo `SDA2_J`, `SCL2_J` của I2C2. Cả bốn đặt ở **phía đầu cắm**. Module không được có điện trở kéo lên.
+- **I2C1, 100 kHz**: bus 300 pF (4–5 module và dây) có thời gian lên 0,85 × 2k2 × 300 pF = 560 ns, đạt chuẩn 100 kHz (1000 ns).
+- **I2C2, 400 kHz**: chuẩn cho phép 300 ns, tức bus tối đa khoảng 150 pF với 2k2 (280 ns). Chuỗi S1 → S3 của xe cân bằng khoảng 100 pF (190 ns). Chỉ cắm vào bus này module cần tốc độ và giữ dây ngắn; nếu cần bus dài hơn thì hạ R22, R23 xuống 1k5.
+- Hai bus tách rời hẳn: module chậm hay dây dài trên I2C1 không làm chậm vòng điều khiển trên I2C2.
+- U4–U9 (6 × SRV05-4, VP = `+3V3`) bảo vệ 22 đường (12 D/A, 2 servo, 4 I2C, 4 SPI); U9 còn 2 kênh trống.
 - Không đặt tụ lọc trên A1–A3: các cổng này còn dùng làm cổng số tốc độ cao (NeoPixel).
 
 ## 6. Danh sách linh kiện
@@ -180,16 +189,16 @@ Còi cấp từ `+3V3` nên dòng của nó đi qua U2. Còi điện từ cỡ 1
 | R2, R3 | 2 | 5k1 | 0603 | – |
 | R4, R5, R6, R8 | 4 | 10 k | 0603 | – |
 | R9 | 1 | 1 k | 0603 | – |
-| R20, R21 | 2 | 2k2 | 0603 | – |
-| R30–R45 | 16 | 220 Ω | 0603 | – |
-| R7, R46–R51 | 7 | 100 Ω | 0603 | – |
+| R20–R23 | 4 | 2k2 | 0603 | – |
+| R30–R43 | 14 | 220 Ω | 0603 | – |
+| R7, R44–R51 | 9 | 100 Ω | 0603 | – |
 | SW1, SW2 | 2 | nút 6 × 6 × 5 | SMD | – |
 | SW3, SW4 | 2 | TS-1088 | SMD 3 × 4 | – |
 | J1 | 1 | TYPE-C-31-M-12 | USB-C 16 chân | – |
 | J2 | 1 | JST XH 2 chân | xem mục 9 | – |
 | J3–J12 | 10 | JST PH 4 chân nằm ngang (S4B-PH-K-S) | xuyên lỗ | – |
 | J13 | 1 | JST PH 6 chân nằm ngang | xuyên lỗ | – |
-| J14–J17 | 4 | hàng rào 1 × 3, 2,54 mm | xuyên lỗ | – |
+| J14, J15 | 2 | hàng rào 1 × 3, 2,54 mm | xuyên lỗ | – |
 | TP1 | 1 | điểm thử Ø1,5 | – | – |
 
 Dấu «–» ở cột LCSC: chưa tra mã. `KH1` (khung bo) không vào BOM.
@@ -203,7 +212,7 @@ Dấu «–» ở cột LCSC: chưa tra mã. `KH1` (khung bo) không vào BOM.
 | `5V_SERVO` (qua F1) | 2 servo nhỏ đang chạy | 0,5 A | 1,3 A (2 servo kẹt) |
 | `5V_SYS` tổng, dự án 10 | ESP32 + MQ-2 + relay + quạt + OLED + 2 servo | 1,1 A | 1,9 A |
 
-Cổng USB máy tính (0,5 A) không nuôi được dự án 10; dùng adapter 5 V/2 A. Cổng servo trên C1 chỉ dùng tối đa 2 servo nhỏ; nhiều hơn thì dùng O7.
+Cổng USB máy tính (0,5 A) không nuôi được dự án 10; dùng adapter 5 V/2 A. C1 có 2 cổng servo, đủ cho mọi dự án không dùng O7 (nhiều nhất là dự án 10: cửa và giàn phơi); cần nhiều servo hơn thì dùng O7.
 
 ## 8. Cơ khí và bố trí linh kiện
 
@@ -212,7 +221,7 @@ Gốc toạ độ ở góc dưới trái của bo, X sang phải, Y lên trên (
 | Thành phần | Vị trí |
 |---|---|
 | A1, A2, A3, D1, D2 (J3–J7) | cạnh dưới, tâm x = 12 / 22 / 32 / 42 / 52 |
-| I2C 1–4 (J9–J12) | cạnh trên, tâm x = 12 / 22 / 32 / 42 |
+| I2C1-A, I2C1-B, I2C2-A, I2C2-B (J9–J12) | cạnh trên, tâm x = 12 / 22 / 32 / 42 |
 | D3 (J8) | cạnh trên, tâm x = 52 |
 | SPI (J13) | cạnh trái, tâm y = 14,75 |
 | USB-C (J1) | cạnh trái, tâm y = 32 |
@@ -222,7 +231,7 @@ Gốc toạ độ ở góc dưới trái của bo, X sang phải, Y lên trên (
 | Nút A, nút B | (14, 15), (24, 15) |
 | Còi | (32,5; 13,5) |
 | LED RGB | (19, 25) |
-| Hàng rào servo 4 × 3 chân | tâm (26; 35,5), chiếm 10,2 × 7,6 |
+| Hàng rào servo 2 × 3 chân | tâm (26; 35,5), chiếm 5,1 × 7,6 |
 
 Lòng bo còn trống khoảng 30 × 32 mm cho toàn bộ linh kiện nguồn, 7 IC chống tĩnh điện và 30 điện trở. Nhiều khả năng phải đặt linh kiện cả hai mặt.
 
@@ -239,8 +248,10 @@ Lòng bo còn trống khoảng 30 × 32 mm cho toàn bộ linh kiện nguồn, 7
 ## 10. Phần mềm
 
 - Firmware: bản fork MicroBlocks trong `Iris blocks/`, cấu hình cho ESP32-S3 với USB CDC gốc.
-- Việc phải làm trong firmware: khai báo chân mặc định của C1 (I2C 8/9, UART 43/44, nút 41/42, còi 40, LED RGB 48) và tên cổng A1–A3, D1–D3.
-- I2C mặc định 100 kHz; cho phép đặt 400 kHz cho xe cân bằng.
+- Việc phải làm trong firmware: khai báo chân mặc định của C1 (I2C1 8/9, UART 1 43/44, nút 41/42, còi 40, LED RGB 48) và tên cổng A1–A3, D1–D3.
+- **Bus I2C thứ hai chưa có trong MicroBlocks**: máy ảo hiện chỉ dùng một bus (`Wire` trong `Iris blocks/vm/sensorPrims.cpp`). Phải thêm bus thứ hai trên GPIO17/18 ở 400 kHz, và để thư viện khối của S1, S3 gọi bus này. Chưa làm.
+- UART 2 trên D2 (GPIO38/39): cần kiểm MicroBlocks có mở được cổng serial thứ hai không.
+- I2C1 để 100 kHz.
 
 ## 11. Kiểm thử bản mẫu
 
@@ -252,21 +263,22 @@ Làm theo thứ tự, chưa gắn module nào:
 4. Thử nút A, B, còi, LED RGB bằng khối lệnh.
 5. Cấp 5,45 V vào J2 (chưa cắm USB): `5V_SYS` ≈ 5,05 V; đo chân VBUS của J1 phải gần 0 V.
 6. Cắm cả hai nguồn: dòng từ USB phải gần 0; rút từng nguồn, bo không reset.
-7. Thử từng cổng: D/A (đọc, ghi, analog trên A1–A3), I2C (quét địa chỉ với một module), SPI (RC522), servo.
+7. Thử từng cổng: D/A (đọc, ghi, analog trên A1–A3), I2C1 và I2C2 (quét địa chỉ với một module trên từng bus), UART trên D3 và D2, SPI (RC522), servo.
 8. Thử cầu chì: tải 2 A vào một cổng servo, F1 phải ngắt và tự phục hồi.
 9. Đo nhiệt U2 và D1 khi WiFi phát liên tục và tải 2 A.
-10. Đo dạng sóng I2C với 5 module: thời gian lên dưới 1000 ns.
+10. Đo dạng sóng I2C1 với 5 module: thời gian lên dưới 1000 ns. Đo I2C2 ở 400 kHz với S1 + S3: thời gian lên dưới 300 ns.
 
 ## 12. Vấn đề mở
 
 | Việc | Ghi chú |
 |---|---|
 | Cổng J2 | Sơ đồ đang gán chân linh kiện nằm ngang (`Cong_XH_2P_Ngang`); bố trí cơ khí 64 × 48 cần loại cắm đứng (B2B-XH-A). Phải đổi chân linh kiện trước khi đi mạch in |
-| Ghi chú trong sơ đồ | Khung «Cơ khí và ghi chú» còn dòng «Bo 96 × 64 mm»; kích thước đúng là 64 × 48 |
 | Nguồn LED RGB | WS2812B-2020 cấp 3,3 V để nhận được tín hiệu 3,3 V; cần đối chiếu điện áp nguồn tối thiểu trong datasheet và thử trên bản mẫu |
 | Còi | Chưa chốt mã; chân linh kiện là tạm. Tính lại dòng trên `+3V3` sau khi chọn |
+| GPIO còn trống | 47 (điểm thử TP1) và ba chân strapping 3, 45, 46 |
 | Xếp linh kiện | Chưa kiểm 87 linh kiện có vừa bo 64 × 48 hay không |
 | Mã LCSC | Mới có mã của U1 |
-| Chân UART của MicroBlocks | Cặp 43/44 trên cổng D3 là tạm, chốt sau khi thử thư viện Serial |
+| Bus I2C thứ hai trong MicroBlocks | Chưa hỗ trợ; phải thêm vào bản fork (mục 10). Trước khi có, các cổng I2C2 không dùng được từ khối lệnh |
+| Phân biệt cổng I2C1 và I2C2 | Cùng loại đầu cắm; cần nhãn in rõ, và cân nhắc dùng vỏ đầu cắm khác màu cho I2C2 |
+| Chân UART của MicroBlocks | Cặp 43/44 (D3) và 38/39 (D2) là tạm, chốt sau khi thử thư viện Serial |
 | PSRAM | Nếu MicroBlocks không cần PSRAM, đổi sang module N16 sẽ giải phóng GPIO35–37 cho một cổng D4 |
-| `C1.STL` trong thư mục này | Là tấm tổ ong, không phải mô hình bo; trang bản đồ kit đang hiện tệp này cho C1 |

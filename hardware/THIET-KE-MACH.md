@@ -58,7 +58,7 @@ Không dùng lại: LMR51606 (chỉ 0,6 A, không đủ cho đường 5 V/3 A), 
 ```
                  C2 NGUỒN PIN                                   C1 BO CHỦ
  USB-C 5 V ─► IP2326 sạc tăng áp ─┐                 USB-C ─► Q1 P-FET ──┐
-                                  ▼                                     ├─► +5V_SYS ─┬─► F1 1,5 A ─► +5V_SERVO (4 cổng servo)
+                                  ▼                                     ├─► +5V_SYS ─┬─► F1 1,5 A ─► +5V_SERVO (2 cổng servo)
    2 cell 18650 ─► HY2120 + FET ─► shunt 10 mΩ ─► công tắc (P-FET)      │            ├─► F2 1,1 A ─► +5V (6 D/A, 4 I2C, SPI)
         bảo vệ                    (INA219)            │                 │            └─► LDO 1 A ──► +3V3 (ESP32-S3, kéo lên I2C)
                                                       ├─► buck 5,45 V/3 A ─► XH 2 chân ─► D1 SS54 ─┘
@@ -75,10 +75,10 @@ Không dùng lại: LMR51606 (chỉ 0,6 A, không đủ cho đường 5 V/3 A), 
 
 ```
  Máy tính ══ USB (GPIO19/20, CDC gốc của ESP32-S3) ══► C1
- C1 ── I2C 3,3 V (GPIO8/9, kéo lên 2k2 chỉ trên C1) ──► S1 ─► S2 ─► S3 ─► O3 ... (nối chuỗi)
-                                                    └─► C2 (INA219), I4, I6, I14, O7
+ C1 ── I2C2 3,3 V, 400 kHz (GPIO17/18, kéo lên 2k2 trên C1) ──► S1 ─► S2 ─► S3 (nối chuỗi)
+ C1 ── I2C1 3,3 V, 100 kHz (GPIO8/9, kéo lên 2k2 trên C1) ──► O3, C2 (INA219), I4, I6, I14, O7
  C1 ── 6 cổng D/A (2 tín hiệu/cổng, 3,3 V) ──► module đơn giản
- C1 ── SPI ──► I13 RFID        C1 ── 4 PWM ──► servo
+ C1 ── SPI ──► I13 RFID        C1 ── 2 PWM ──► servo
  S1 ── PWM + chiều ──► TB6612 ══► động cơ;  encoder A/B ──► timer của STM32G030
 ```
 
@@ -280,7 +280,7 @@ Ghi chú:
 
 ```
  USB-C ─┬─ VBUS ─► Q1 AO3401A ─┐
-        │                      ├─► +5V_SYS ─┬─► F1 ─► +5V_SERVO ─► 4 cổng servo
+        │                      ├─► +5V_SYS ─┬─► F1 ─► +5V_SERVO ─► 2 cổng servo
  XH 2 chân (từ C2) ─► D1 SS54 ─┘            ├─► F2 ─► +5V ─► 6 D/A, 4 I2C, SPI
         │                                   └─► U2 LDO ─► +3V3 ─► ESP32-S3-WROOM-1
         └─ D+/D− ─► SRV05-4 ─► GPIO20/19
@@ -305,8 +305,8 @@ MicroBlocks dựng cho ESP32-S3 với `ARDUINO_USB_CDC_ON_BOOT` (xem `Iris block
 | J1 | USB-C | TYPE-C-31-M-12 | – | CC1, CC2 mỗi chân 5k1 xuống GND |
 | U3 | ESD USB | SRV05-4, VP = VBUS | – | |
 | U4–U9 | ESD cổng | 6 × SRV05-4, VP = +3V3 | – | 22 đường tín hiệu |
-| R… | Nối tiếp tín hiệu | 220 Ω × 16, 100 Ω × 6 | – | D/A, servo: 220 Ω; I2C, SPI: 100 Ω |
-| R20, R21 | Kéo lên I2C | 2k2 lên +3V3 | – | |
+| R30–R51 | Nối tiếp tín hiệu | 220 Ω × 14, 100 Ω × 8 | – | D/A, servo: 220 Ω; I2C1, I2C2, SPI: 100 Ω |
+| R20–R23 | Kéo lên I2C1, I2C2 | 2k2 lên +3V3 | – | mỗi bus một cặp |
 | SW1, SW2 | Nút A, B | nút 6 × 6, 10 k kéo lên + 100 nF | – | GPIO41, GPIO42 |
 | SW3 | RESET | TS-1088 | – | EN: 10 k kéo lên + 1 µF |
 | SW4 | BOOT | TS-1088 | – | GPIO0 xuống GND |
@@ -323,11 +323,12 @@ MicroBlocks dựng cho ESP32-S3 với `ARDUINO_USB_CDC_ON_BOOT` (xem `Iris block
 | A2 | S1, S2 | 4, 5 | 4, 5 |
 | A3 | S1, S2 | 6, 7 | 6, 7 |
 | D1 | S1, S2 | 14, 21 | 22, 23 |
-| D2 | S1, S2 | 38, 39 | 31, 32 |
+| D2 / UART 2 | S1 = TX, S2 = RX | 38, 39 | 31, 32 |
 | D3 / UART | S1 = TX, S2 = RX | 43, 44 | 37, 36 |
-| I2C | SDA, SCL | 8, 9 | 12, 17 |
+| I2C1 (2 cổng) | SDA, SCL | 8, 9 | 12, 17 |
+| I2C2 (2 cổng, tốc độ cao) | SDA, SCL | 17, 18 | 10, 11 |
 | SPI | SCK, MOSI, MISO, CS | 12, 11, 13, 10 | 20, 19, 21, 18 |
-| Servo 1–4 | PWM | 15, 16, 17, 18 | 8, 9, 10, 11 |
+| Servo 1–2 | PWM | 15, 16 | 8, 9 |
 | USB | D−, D+ | 19, 20 | 13, 14 |
 | Nút A, B | – | 41, 42 | 34, 35 |
 | Còi | – | 40 | 33 |
@@ -342,7 +343,7 @@ MicroBlocks dựng cho ESP32-S3 với `ARDUINO_USB_CDC_ON_BOOT` (xem `Iris block
 - **Chọn nguồn.** Khi không có C2: cực G của Q1 bị R1 kéo xuống, Q1 dẫn, sụt áp 2 A × 60 mΩ = 0,12 V (0,24 W). Khi có C2: lưới 5V_EXT (5,45 V) đưa cực G lên cao, Q1 khoá, +5V_SYS = 5,45 − 0,4 = 5,05 V; diode thân của Q1 không dẫn vì VBUS không cao hơn +5V_SYS. D1 chặn dòng từ USB chảy ngược vào đầu ra buck của C2.
 - **D1**: 0,4 V × 1,5 A = 0,6 W điển hình; 0,45 V × 3 A = 1,35 W ở đỉnh, cần vùng đồng tản nhiệt ở hai chân.
 - **U2**: (5,0 − 3,3) × 0,12 A = 0,2 W trung bình; 0,6 W khi phát WiFi liên tục 350 mA. Vỏ SOT-223 với vùng đồng 2 cm² tản khoảng 60 °C/W nên tăng 36 °C ở mức xấu nhất. AP2112K (SOT-23-5, khoảng 200 °C/W) sẽ tăng 120 °C, vì vậy không dùng ở đây.
-- **Kéo lên I2C 2k2**: dòng kéo 1,5 mA. Với bus 300 pF (4–5 module và dây), thời gian lên 0,85 × 2k2 × 300 pF = 560 ns: đạt chuẩn 100 kHz (1000 ns), không đạt 400 kHz (300 ns). Thư viện để mặc định 100 kHz; riêng vòng điều khiển xe cân bằng (chuỗi ngắn, khoảng 100 pF, 190 ns) dùng được 400 kHz.
+- **Kéo lên I2C 2k2**: dòng kéo 1,5 mA. Với bus 300 pF (4–5 module và dây), thời gian lên 0,85 × 2k2 × 300 pF = 560 ns: đạt chuẩn 100 kHz (1000 ns), không đạt 400 kHz (300 ns). Vì vậy bo có hai bus (quyết định ngày 16/11/2026): I2C1 chạy 100 kHz cho module thường; I2C2 (GPIO17/18, hai chân lấy từ cổng servo 3 và 4 đã bỏ) chạy 400 kHz cho S1, S3, với điều kiện bus không quá 150 pF (0,85 × 2k2 × 150 pF = 280 ns).
 - **Điện trở nối tiếp 220 Ω**: nếu module lỗi đưa 5 V lên chân tín hiệu, dòng qua diode kẹp là (5 − 3,3 − 0,7) / 220 = 4,5 mA, chảy vào lưới +3V3 và được ESP32 tiêu thụ. Thứ tự bắt buộc: đầu cắm → điện trở → (SRV05-4, chân ESP32).
 - **Cầu chì**: F1 1,5 A giữ cho 2 servo nhỏ (2 × 0,65 A khi kẹt). F2 1,1 A giữ cho các cổng (tải nặng nhất khoảng 0,6 A). Sụt áp qua PTC khoảng 0,1–0,15 V ở 1 A.
 

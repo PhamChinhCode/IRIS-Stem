@@ -76,7 +76,7 @@ def _linh_kien(ma):
               _b("nut_reset", "den", 4.0, 4.0, 2.0, 2, 3),
               _b("nut_A", "do", 6.0, 6.0, 5.0, -18, -9), _b("nut_B", "xanh", 6.0, 6.0, 5.0, -8, -9),
               _t("coi", "den", 9.0, 5.5, 0.5, -10.5), _b("LED_RGB", "trang", 5.0, 5.0, 1.6, -13, 1),
-              _b("hang_rao_servo_4x3", "den", 10.2, 7.6, 8.5, -6, 11.5)]
+              _b("hang_rao_servo_2x3", "den", 5.1, 7.6, 8.5, -6, 11.5)]
         return p
     if ma == "C2":
         return [_b("de_pin_2x18650", "den", 77.0, 41.0, 6.0),
