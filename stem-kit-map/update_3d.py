@@ -47,15 +47,20 @@ def _hex(c):
     return "#%02x%02x%02x" % (f(r), f(g), f(b))
 
 
-def _la(shape, mau=None):
+def _la(shape, mau=None, vi_tri=None):
+    """Các khối lá kèm màu. Vị trí của khối con tính theo cụm cha (tệp STEP của KiCad đặt mỗi linh kiện trong một cụm
+    có vị trí riêng), nên phải cộng dồn vị trí các cụm cha vào khối lá."""
     c = getattr(shape, "color", None) or mau
     con = list(getattr(shape, "children", []) or [])
     if not con:
+        if vi_tri is not None:
+            shape = shape.moved(vi_tri)
         ds = shape.solids()
         return [(x, c) for x in ds] if ds else [(shape, c)]      # tệp chỉ có mặt (surface): vẫn vẽ các mặt đó
+    xuong = shape.location if vi_tri is None else vi_tri * shape.location
     kq = []
     for k in con:
-        kq += _la(k, c)
+        kq += _la(k, c, xuong)
     return kq
 
 
